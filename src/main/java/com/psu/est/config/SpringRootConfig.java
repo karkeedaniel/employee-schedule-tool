@@ -8,9 +8,10 @@ import org.springframework.context.annotation.Import;
  * Created by danielkarkee on 2/1/16.
  */
 @Configuration
-@ComponentScan (
-        "com.psu.est.dao.impl"
-)
+@ComponentScan (value = {
+        "com.psu.est.dao.impl",
+        "com.psu.est.service"
+})
 @Import(DataSourceConfig.class)
 public class SpringRootConfig {
 }
