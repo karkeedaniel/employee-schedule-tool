@@ -35,8 +35,18 @@ public class EmployeeDaoImplTest extends CommonTest {
     }
 
     @Test
-    public void testPersist() throws Exception {
-
+    public void testPersist() {
+        try {
+            Employee employee = new Employee();
+            employee.setFirstName("Daniel");
+            employee.setMiddleInitial('J');
+            employee.setLastName("Karkee");
+            employee.setContact("223293812");
+            employeeDao.persist(employee);
+            assertNotEquals(0, employee.getEmployeeId());
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
     }
 
     @Test
@@ -56,17 +66,29 @@ public class EmployeeDaoImplTest extends CommonTest {
 
     @Test
     public void testGet() throws Exception {
-
+        Employee employee = employeeDao.get(1);
+        assertNotNull(employee);
     }
 
     @Test
     public void testGetAll() {
         try {
             List<Employee> employeeList = employeeDao.getAll();
+            assertNotNull(employeeList);
             logger.info("Size: " + employeeList.size());
             for (Employee employee: employeeList) {
                 logger.info(employee.toString());
             }
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
+    @Test
+    public void testGetListByRole() {
+        try {
+            List<Employee> employeeList = employeeDao.getListByRole("TECHNICIAN");
+            assertNotNull(employeeList);
         } catch (Exception e) {
             fail("Exception: " + e);
         }

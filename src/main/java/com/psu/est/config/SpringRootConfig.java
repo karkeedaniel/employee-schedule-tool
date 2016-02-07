@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Import;
         "com.psu.est.dao.impl",
         "com.psu.est.service"
 })
-@Import(DataSourceConfig.class)
+@Import(value = {
+        DataSourceConfig.class,
+        SpringSecurityConfig.class
+})
 public class SpringRootConfig {
 }

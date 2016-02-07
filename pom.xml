@@ -34,6 +34,7 @@
 
     <properties>
         <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
+        <org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
         <org.hibernate.version>4.3.6.Final</org.hibernate.version>
         <mysql.version>5.1.31</mysql.version>
         <servlet.version>3.1.0</servlet.version>
@@ -48,6 +49,13 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
                 <version>${org.springframework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${org.springframework.security.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -74,6 +82,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

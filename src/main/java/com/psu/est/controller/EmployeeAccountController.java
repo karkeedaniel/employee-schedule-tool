@@ -18,7 +18,7 @@ public class EmployeeAccountController {
     @Autowired
     private EmployeeAccountService employeeAccountService;
 
-    @RequestMapping(value = "/employeeaccount", method = RequestMethod.GET)
+    @RequestMapping(value = "/employeeaccount/get-all/", method = RequestMethod.GET)
     public List<EmployeeAccount> getAll() {
         return employeeAccountService.getAll();
     }

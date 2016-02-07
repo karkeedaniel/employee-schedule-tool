@@ -40,9 +40,7 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         final JndiDataSourceLookup lookup = new JndiDataSourceLookup();
         lookup.setResourceRef(true);
-
-        DataSource dataSource = lookup.getDataSource("jdbc/estDB");
-        return dataSource;
+        return lookup.getDataSource("jdbc/estDB");
     }
 
     @Autowired
