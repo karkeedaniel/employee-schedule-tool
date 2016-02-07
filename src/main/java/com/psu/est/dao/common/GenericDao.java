@@ -16,21 +16,21 @@ public interface GenericDao<T extends DomainObject> {
      * @param object
      * @throws DataAccessException
      */
-    public void persist(T object) throws DataAccessException;
+    public T persist(T object) throws DataAccessException;
 
     /**
      *
      * @param object
      * @throws DataAccessException
      */
-    public void update(T object) throws DataAccessException;
+    public T update(T object) throws DataAccessException;
 
     /**
      *
      * @param object
      * @throws DataAccessException
      */
-    public void saveOrUpdate(T object) throws DataAccessException;
+    public T saveOrUpdate(T object) throws DataAccessException;
 
     /**
      *

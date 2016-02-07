@@ -9,18 +9,22 @@ import java.sql.Timestamp;
  * Created by danielkarkee on 2/3/16.
  */
 @Entity
-@Table(name = "employee_account", schema = "est")
+@Table(name = "employee_account", schema = "est", catalog = "")
 public class EmployeeAccount implements DomainObject {
+
     private int employeeAccountId;
     private String username;
     private String password;
     private String role;
+    private int salary;
     private String createdBy;
     private Timestamp dateCreated;
     private String modifiedBy;
     private Timestamp dateModified;
+    private int employeeId;
 
     @Id
+    @GeneratedValue
     @Column(name = "employee_account_id")
     public int getEmployeeAccountId() {
         return employeeAccountId;
@@ -58,6 +62,16 @@ public class EmployeeAccount implements DomainObject {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Basic
+    @Column(name = "salary")
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
     }
 
     @Basic
@@ -100,6 +114,16 @@ public class EmployeeAccount implements DomainObject {
         this.dateModified = dateModified;
     }
 
+    @Basic
+    @Column(name = "employee_id")
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,15 +132,16 @@ public class EmployeeAccount implements DomainObject {
         EmployeeAccount that = (EmployeeAccount) o;
 
         if (employeeAccountId != that.employeeAccountId) return false;
+        if (salary != that.salary) return false;
+        if (employeeId != that.employeeId) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (role != null ? !role.equals(that.role) : that.role != null) return false;
         if (createdBy != null ? !createdBy.equals(that.createdBy) : that.createdBy != null) return false;
         if (dateCreated != null ? !dateCreated.equals(that.dateCreated) : that.dateCreated != null) return false;
         if (modifiedBy != null ? !modifiedBy.equals(that.modifiedBy) : that.modifiedBy != null) return false;
-        if (dateModified != null ? !dateModified.equals(that.dateModified) : that.dateModified != null) return false;
+        return dateModified != null ? dateModified.equals(that.dateModified) : that.dateModified == null;
 
-        return true;
     }
 
     @Override
@@ -125,10 +150,12 @@ public class EmployeeAccount implements DomainObject {
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + salary;
         result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
         result = 31 * result + (modifiedBy != null ? modifiedBy.hashCode() : 0);
         result = 31 * result + (dateModified != null ? dateModified.hashCode() : 0);
+        result = 31 * result + employeeId;
         return result;
     }
 }
