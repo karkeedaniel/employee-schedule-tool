@@ -14,8 +14,12 @@ import java.io.Serializable;
 @Entity
 public class Location implements DomainObject, Serializable {
     private int locationId;
-    private double latidute;
+    private double latitude;
     private double longitude;
+    private String street;
+    private String city;
+    private String state;
+    private Integer zip;
 
     @Id
     @Column(name = "location_id")
@@ -28,13 +32,13 @@ public class Location implements DomainObject, Serializable {
     }
 
     @Basic
-    @Column(name = "latidute")
-    public double getLatidute() {
-        return latidute;
+    @Column(name = "latitude")
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLatidute(double latidute) {
-        this.latidute = latidute;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     @Basic
@@ -55,7 +59,7 @@ public class Location implements DomainObject, Serializable {
         Location location = (Location) o;
 
         if (locationId != location.locationId) return false;
-        if (Double.compare(location.latidute, latidute) != 0) return false;
+        if (Double.compare(location.latitude, latitude) != 0) return false;
         if (Double.compare(location.longitude, longitude) != 0) return false;
 
         return true;
@@ -66,10 +70,51 @@ public class Location implements DomainObject, Serializable {
         int result;
         long temp;
         result = locationId;
-        temp = Double.doubleToLongBits(latidute);
+        temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+
+    @Basic
+    @Column(name = "street")
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    @Basic
+    @Column(name = "city")
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Basic
+    @Column(name = "state")
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @Basic
+    @Column(name = "zip")
+    public Integer getZip() {
+        return zip;
+    }
+
+    public void setZip(Integer zip) {
+        this.zip = zip;
     }
 }

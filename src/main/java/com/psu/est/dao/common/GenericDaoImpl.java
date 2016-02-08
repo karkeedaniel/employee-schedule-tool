@@ -26,20 +26,20 @@ public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
 
     @Override
     public T persist(T object) throws DataAccessException {
-//        sessionFactory.getCurrentSession().persist(object);
+        sessionFactory.getCurrentSession().persist(object);
         return object;
 
     }
 
     @Override
     public T update(T object) throws DataAccessException {
-//        sessionFactory.getCurrentSession().update(object);
+        sessionFactory.getCurrentSession().update(object);
         return object;
     }
 
     @Override
     public T saveOrUpdate(T object) throws DataAccessException {
-//        sessionFactory.getCurrentSession().saveOrUpdate(object);
+        sessionFactory.getCurrentSession().saveOrUpdate(object);
         return object;
     }
 
@@ -51,12 +51,12 @@ public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
     @Override
     public T get(Serializable id) throws DataAccessException {
         return null;
-//        return (T) sessionFactory.getCurrentSession().get(type, id);
+        //return (T) sessionFactory.getCurrentSession().get(type, id);
     }
 
     @Override
     public List<T> getAll() throws DataAccessException {
-//        return sessionFactory.getCurrentSession().createCriteria(type).list();
-        return null;
+        return sessionFactory.getCurrentSession().createCriteria(type).list();
+        //return null;
     }
 }
