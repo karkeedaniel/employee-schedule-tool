@@ -1,7 +1,10 @@
 package com.psu.est.service;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.model.AddressComponent;
+import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import com.psu.est.dao.interfaces.LocationDao;
 import com.psu.est.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +36,42 @@ public class LocationService {
         return arcLength;
       }
 
-    public void updateCurrent(){}
+    public static void updateCurrent(Location location, double newLatitude, double newLongitude)
+    {
+        GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyD8IrKPJmes8IhgTRFuDQSyRu7OX72hBd8");
+        GeocodingResult[] jsonResponse = new GeocodingResult[0];
+        LatLng geometry = new LatLng(newLatitude,newLongitude);
+        try {
+            jsonResponse = GeocodingApi.reverseGeocode(context,
+                    geometry).await();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        location.setLatitude(jsonResponse[0].geometry.location.lat);
+        location.setLongitude(jsonResponse[0].geometry.location.lng);
+        location.setFormattedAddress(jsonResponse[0].formattedAddress);
+
+        String ZipCodeExtension = null;
+        for (AddressComponent component:jsonResponse[0].addressComponents)
+        {
+            AddressComponentType type1 = component.types[0];
+            if (component.types[0] == AddressComponentType.STREET_NUMBER)
+                location.setStreetNumber(component.shortName);
+            else if(component.types[0] == AddressComponentType.ROUTE  )
+                location.setStreet(component.shortName);
+            else if(component.types[0] == AddressComponentType.LOCALITY )
+                location.setCity(component.shortName);
+            else if(component.types[0] == AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1 )
+                location.setState(component.shortName);
+            else if(component.types[0] == AddressComponentType.POSTAL_CODE )
+                location.setZip(component.shortName);
+            else if(component.types[0] == AddressComponentType.POSTAL_CODE_SUFFIX )
+                ZipCodeExtension = "-"+component.shortName;
+        }
+        if (ZipCodeExtension!=null && !ZipCodeExtension.isEmpty() && location.getZip()!=null && !location.getZip().isEmpty())
+            location.setZip(location.getZip()+ZipCodeExtension);
+    }
 
     public void toCoordinates() {}
 
@@ -61,18 +99,29 @@ public class LocationService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        location.setStreetNumber(jsonResponse[0].addressComponents[0].shortName);
-        location.setStreet(jsonResponse[0].addressComponents[1].shortName);
-        String temp3 = jsonResponse[0].addressComponents[2].longName;  // locality
-        location.setCity(jsonResponse[0].addressComponents[3].longName);
-        String temp4 = jsonResponse[0].addressComponents[4].shortName; // county
-        location.setState(jsonResponse[0].addressComponents[5].shortName);
-        String temp6 = jsonResponse[0].addressComponents[6].longName; //country
-        location.setZip(jsonResponse[0].addressComponents[7].shortName);
-        String temp8 = jsonResponse[0].addressComponents[8].shortName; //extended zip
-        location.setFormattedAddress(jsonResponse[0].formattedAddress);
 
         location.setLatitude(jsonResponse[0].geometry.location.lat);
         location.setLongitude(jsonResponse[0].geometry.location.lng);
+        location.setFormattedAddress(jsonResponse[0].formattedAddress);
+
+        String ZipCodeExtension = null;
+        for (AddressComponent component:jsonResponse[0].addressComponents)
+        {
+            AddressComponentType type1 = component.types[0];
+            if (component.types[0] == AddressComponentType.STREET_NUMBER)
+                location.setStreetNumber(component.shortName);
+            else if(component.types[0] == AddressComponentType.ROUTE  )
+                location.setStreet(component.shortName);
+            else if(component.types[0] == AddressComponentType.LOCALITY )
+                location.setCity(component.shortName);
+            else if(component.types[0] == AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1 )
+                location.setState(component.shortName);
+            else if(component.types[0] == AddressComponentType.POSTAL_CODE )
+                location.setZip(component.shortName);
+            else if(component.types[0] == AddressComponentType.POSTAL_CODE_SUFFIX )
+                ZipCodeExtension = "-"+component.shortName;
+        }
+        if (ZipCodeExtension!=null && !ZipCodeExtension.isEmpty() && location.getZip()!=null && !location.getZip().isEmpty())
+            location.setZip(location.getZip()+ZipCodeExtension);
     }
 }

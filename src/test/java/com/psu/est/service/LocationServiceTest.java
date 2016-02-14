@@ -92,8 +92,9 @@ public class LocationServiceTest extends CommonTest {
             location.setCity("Bethlehem");
             location.setState("PA");
             location.setZip("18018");
-            locationService.updateCurrent();
-            assertFalse("Bethlehem".contentEquals(location.getCity()));
+            resolveAddress(location);
+            locationService.updateCurrent(location,38.8976094,-77.0367349);
+            assertTrue("Washington".contentEquals(location.getCity()));
         }catch (Exception e) {
             fail("Exception: " + e);}
     }
@@ -108,15 +109,15 @@ public class LocationServiceTest extends CommonTest {
             location.setState("DC");
             location.setZip("20500");
             resolveAddress(location);
-            assertEquals(location.getLatitude(), 38.8987195, .001);
-            assertEquals(location.getLongitude(), -77.0374031, .001);
+            assertEquals(location.getLatitude(), 38.8976094, .001);
+            assertEquals(location.getLongitude(), -77.0367349, .001);
         } catch (Exception e) {
             fail("Exception: " + e);
         }
     }
 
     @Test
-    public void testDistance2() throws Exception {
+    public void testDistance1c() throws Exception {
         try{
             Location location1 = new Location();
             location1.setStreetNumber("1600");
@@ -148,8 +149,17 @@ public class LocationServiceTest extends CommonTest {
             location.setCity("Washington");
             location.setState("DC");
             location.setZip("20500");
-            locationService.updateCurrent();
-            assertFalse("Washington".contentEquals(location.getCity()));
+            resolveAddress(location);
+            locationService.updateCurrent(location,40.6293099,-75.410578);
+            assertTrue("Bethlehem".contentEquals(location.getCity()));
+            Location location1 = new Location();
+            location1.setStreetNumber("1103");
+            location1.setStreet("Raymond Avenue");
+            location1.setCity("Bethlehem");
+            location1.setState("PA");
+            location1.setZip("18018");
+            resolveAddress(location1);
+            assertTrue(location1.equals(location));
         }catch (Exception e) {
             fail("Exception: " + e);}
     }
