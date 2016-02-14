@@ -37,12 +37,13 @@ public class LocationDaoImplTest extends CommonTest {
     public void testPersist() throws Exception {
         try{
             Location location = new Location();
-            location.setStreet("1600 Pennsylvania Ave NW");
+            location.setStreetNumber("1600");
+            location.setStreet("Pennsylvania Ave NW");
             location.setCity("Washington");
             location.setState("DC");
-            location.setZip(20500);
+            location.setZip("20500");
             locationDao.persist(location);
-            assertNotEquals(0,location.getLocationId());
+            assertNotEquals((long) location.getLocationId(), 0L);
         }catch (Exception e) {
             fail("Exception: " + e);
         }
@@ -52,15 +53,16 @@ public class LocationDaoImplTest extends CommonTest {
     public void testUpdate() throws Exception {
         try{
             Location location = new Location();
-            location.setStreet("1600 Pennsylvania Ave NW");
+            location.setStreetNumber("1600");
+            location.setStreet("Pennsylvania Ave NW");
             location.setCity("Washington");
             location.setState("DC");
-            location.setZip(20500);
+            location.setZip("20500");
             locationDao.persist(location);
-            location.setStreet("5700 Pennsylvania Ave NW");
+            location.setStreetNumber("5700");
             locationDao.update(location);
             Location otherLocation = locationDao.get(location.getLocationId());
-            assertTrue("5700 Pennsylvania Ave NW".contentEquals(otherLocation.getStreet()));
+            assertTrue("5700".contentEquals(otherLocation.getStreetNumber()));
         }catch (Exception e) {
             fail("Exception: " + e);
         }
@@ -70,15 +72,16 @@ public class LocationDaoImplTest extends CommonTest {
     public void testSaveOrUpdate() throws Exception {
         try{
             Location location = new Location();
-            location.setStreet("1600 Pennsylvania Ave NW");
+            location.setStreetNumber("1600");
+            location.setStreet("Pennsylvania Ave NW");
             location.setCity("Washington");
             location.setState("DC");
-            location.setZip(20500);
+            location.setZip("20500");
             locationDao.saveOrUpdate(location);
-            location.setStreet("5700 Pennsylvania Ave NW");
+            location.setStreetNumber("5700");
             locationDao.saveOrUpdate(location);
             Location otherLocation = locationDao.get(location.getLocationId());
-            assertTrue("5700 Pennsylvania Ave NW".contentEquals(otherLocation.getStreet()));
+            assertTrue("5700".contentEquals(otherLocation.getStreetNumber()));
             assertEquals(otherLocation.getZip(),location.getZip());
         }catch (Exception e) {
             fail("Exception: " + e);
@@ -89,10 +92,11 @@ public class LocationDaoImplTest extends CommonTest {
     public void testDelete() throws Exception {
         try{
             Location location = new Location();
-            location.setStreet("1600 Pennsylvania Ave NW");
+            location.setStreetNumber("1600");
+            location.setStreet("Pennsylvania Ave NW");
             location.setCity("Washington");
             location.setState("DC");
-            location.setZip(20500);
+            location.setZip("20500");
             locationDao.persist(location);
             Location otherLocation = locationDao.get(location.getLocationId());
             locationDao.delete(location);
@@ -106,10 +110,10 @@ public class LocationDaoImplTest extends CommonTest {
     public void testGet() throws Exception {
         try{
             Location location = new Location();
-            location.setStreet("1600 Pennsylvania Ave NW");
-            location.setCity("Washington");
+            location.setStreetNumber("1600");
+            location.setStreet("Pennsylvania Ave NW");
             location.setState("DC");
-            location.setZip(20500);
+            location.setZip("20500");
             locationDao.persist(location);
             Location otherLocation = locationDao.get(location.getLocationId());
             assertEquals(otherLocation,location);
