@@ -50,8 +50,7 @@ public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
 
     @Override
     public T get(Serializable id) throws DataAccessException {
-        return null;
-        //return (T) sessionFactory.getCurrentSession().get(type, id);
+        return (T) sessionFactory.getCurrentSession().get(type, id);
     }
 
     @Override

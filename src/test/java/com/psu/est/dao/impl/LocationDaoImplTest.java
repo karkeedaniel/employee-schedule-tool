@@ -5,9 +5,12 @@ import com.psu.est.model.Location;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.psu.est.dao.common.CommonTest;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,11 +25,13 @@ public class LocationDaoImplTest extends CommonTest {
 
     @Autowired
     private LocationDao locationDao;
+    //@Autowired
+    //private SessionFactory sessionFactory;
 
     @Test
     public void testGetListByZipCode() throws Exception {
         try{
-            List<Location> locationList = locationDao.getListByZipCode(20500);
+            List<Location> locationList = locationDao.getListByZipCode("20500");
             assertNotNull(locationList);
         } catch (Exception e){
             fail("Exception " + e);
@@ -34,7 +39,8 @@ public class LocationDaoImplTest extends CommonTest {
     }
 
     @Test
-    public void testPersist() throws Exception {
+    @Transactional
+    public void testLocationPersist() throws Exception {
         try{
             Location location = new Location();
             location.setStreetNumber("1600");
@@ -43,6 +49,7 @@ public class LocationDaoImplTest extends CommonTest {
             location.setState("DC");
             location.setZip("20500");
             locationDao.persist(location);
+            //sessionFactory.getCurrentSession().flush(); //debugging test
             assertNotEquals((long) location.getLocationId(), 0L);
         }catch (Exception e) {
             fail("Exception: " + e);
@@ -50,7 +57,7 @@ public class LocationDaoImplTest extends CommonTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testLocationUpdate() throws Exception {
         try{
             Location location = new Location();
             location.setStreetNumber("1600");
@@ -61,7 +68,8 @@ public class LocationDaoImplTest extends CommonTest {
             locationDao.persist(location);
             location.setStreetNumber("5700");
             locationDao.update(location);
-            Location otherLocation = locationDao.get(location.getLocationId());
+            Location otherLocation = new Location();
+            otherLocation = locationDao.get(location.getLocationId());
             assertTrue("5700".contentEquals(otherLocation.getStreetNumber()));
         }catch (Exception e) {
             fail("Exception: " + e);
@@ -69,7 +77,7 @@ public class LocationDaoImplTest extends CommonTest {
     }
 
     @Test
-    public void testSaveOrUpdate() throws Exception {
+    public void testLocationSaveOrUpdate() throws Exception {
         try{
             Location location = new Location();
             location.setStreetNumber("1600");
@@ -89,7 +97,7 @@ public class LocationDaoImplTest extends CommonTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void testLocationDelete() throws Exception {
         try{
             Location location = new Location();
             location.setStreetNumber("1600");
@@ -100,18 +108,20 @@ public class LocationDaoImplTest extends CommonTest {
             locationDao.persist(location);
             Location otherLocation = locationDao.get(location.getLocationId());
             locationDao.delete(location);
-            assertEquals(otherLocation,location);
+            location = locationDao.get(otherLocation.getLocationId());
+            assertNull(location);
         }catch (Exception e) {
             fail("Exception: " + e);
         }
     }
 
     @Test
-    public void testGet() throws Exception {
+    public void testLocationGet() throws Exception {
         try{
             Location location = new Location();
             location.setStreetNumber("1600");
             location.setStreet("Pennsylvania Ave NW");
+            location.setCity("Washington");
             location.setState("DC");
             location.setZip("20500");
             locationDao.persist(location);
@@ -123,10 +133,19 @@ public class LocationDaoImplTest extends CommonTest {
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testLocationGetAll() throws Exception {
         try {
             List<Location> locationList = locationDao.getAll();
             assertNotNull(locationList);
+            Location location = new Location();
+            location.setStreetNumber("1600");
+            location.setStreet("Pennsylvania Ave NW");
+            location.setCity("Washington");
+            location.setState("DC");
+            location.setZip("20500");
+            locationDao.persist(location);
+            List<Location> locationList1 = locationDao.getAll();
+            assertTrue(locationList.size()+1 == locationList1.size());
         } catch (Exception e) {
             fail("Exception: " + e);
         }

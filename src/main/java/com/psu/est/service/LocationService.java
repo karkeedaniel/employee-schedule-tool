@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LocationService {
-    @Autowired
-    private LocationDao locationDao;
+    //@Autowired
+    //private LocationDao locationDao;
 
-    public static double distance (Location location1, Location location2 )
+    public double distance (Location location1, Location location2 )
     {
         if (Double.isNaN(location1.getLatitude()) || Double.isNaN(location2.getLatitude()))
         {
@@ -36,7 +36,7 @@ public class LocationService {
         return arcLength;
       }
 
-    public static void updateCurrent(Location location, double newLatitude, double newLongitude)
+    public void updateCurrent(Location location, double newLatitude, double newLongitude)
     {
         GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyD8IrKPJmes8IhgTRFuDQSyRu7OX72hBd8");
         GeocodingResult[] jsonResponse = new GeocodingResult[0];
@@ -75,7 +75,7 @@ public class LocationService {
 
     public void toCoordinates() {}
 
-    public static void resolveAddress(Location location){
+    public void resolveAddress(Location location){
         if (location.getFormattedAddress()==null || location.getFormattedAddress().isEmpty())
         {
             String addrNoZip = location.getStreetNumber()+" "+location.getStreet()+", "+
