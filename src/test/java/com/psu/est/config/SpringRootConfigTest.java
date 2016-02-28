@@ -14,10 +14,6 @@ import static org.junit.Assert.*;
  */
 
 @Configuration
-@ComponentScan(value = {
-        "com.psu.est.dao.impl",
-        "com.psu.est.service"
-})
 @Import(value = {SpringRootConfig.class})
 @PropertySource(value = {"classpath:test-application.properties"})
 public class SpringRootConfigTest {
