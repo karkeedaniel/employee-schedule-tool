@@ -10,9 +10,5 @@ import java.util.List;
  */
 public interface LocationDao extends GenericDao<Location> {
 
-    /**
-     * @param zipCode
-     * @return
-     */
-     List<Location> getListByZipCode(int zipCode);
+   List<Location> getListByZipCode(String zipCode);
 }

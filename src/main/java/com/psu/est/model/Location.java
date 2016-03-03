@@ -2,57 +2,58 @@ package com.psu.est.model;
 
 import com.psu.est.model.interfaces.DomainObject;
 import com.psu.est.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Created by danielkarkee on 2/4/16.
- */
+
 @Entity
 public class Location implements DomainObject, Serializable {
 
 
     private Integer locationId;
-    private Double latitude = Double.NaN;
-    private Double longitude = Double.NaN;
-    private String streetNumber = null;
-    private String street = null;
-    private String city = null;
-    private String state = null;
-    private String zip = null;
-    private String formattedAddress = null;
+    private Double latitude;// = Double.NaN;
+    private Double longitude;// = Double.NaN;
+    private String streetNumber;// = null;
+    private String street;// = null;
+    private String city;// = null;
+    private String state;// = null;
+    private String zip;// = null;
+    private String formattedAddress;// = null;
 
+    //@Autowired
+    //private LocationService locationService;
+     /*
     public Location()
     {
         super();
     }
 
-    public Location(String fromattedAddress)
+
+    public Location(String formattedAddress)
     {
         super();
-        this.formattedAddress = fromattedAddress;
-        LocationService.resolveAddress(this);
+        this.formattedAddress = formattedAddress;
+        locationService.resolveAddress(this);
     }
 
     public Location(String streetNumber,String street,String city, String state)
     {
         super();
         this.formattedAddress = streetNumber+" "+street+", "+city+", "+state;
-        LocationService.resolveAddress(this);
+        locationService.resolveAddress(this);
     }
 
     public Location(String streetNumber,String street,String city, String state,String zip)
     {
         super();
         this.formattedAddress = streetNumber+" "+street+", "+city+", "+state+" "+zip;
-        LocationService.resolveAddress(this);
+        locationService.resolveAddress(this);
     }
-
+*/
     @Id
+    @GeneratedValue
     @Column(name = "location_id")
     public Integer getLocationId() {
         return locationId;
