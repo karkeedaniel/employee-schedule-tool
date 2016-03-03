@@ -16,7 +16,7 @@ import java.util.List;
 public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
 
     @Autowired
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
     private Class<T> type;
 
@@ -50,13 +50,11 @@ public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
 
     @Override
     public T get(Serializable id) throws DataAccessException {
-        return null;
-        //return (T) sessionFactory.getCurrentSession().get(type, id);
+        return (T) sessionFactory.getCurrentSession().get(type, id);
     }
 
     @Override
     public List<T> getAll() throws DataAccessException {
         return sessionFactory.getCurrentSession().createCriteria(type).list();
-        //return null;
     }
 }
