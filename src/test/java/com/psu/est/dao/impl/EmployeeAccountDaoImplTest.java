@@ -2,7 +2,11 @@ package com.psu.est.dao.impl;
 
 import com.psu.est.dao.common.CommonTest;
 import com.psu.est.dao.interfaces.EmployeeAccountDao;
+import com.psu.est.dao.interfaces.EmployeeDao;
+import com.psu.est.model.Employee;
 import com.psu.est.model.EmployeeAccount;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +23,13 @@ import static org.junit.Assert.*;
  */
 public class EmployeeAccountDaoImplTest extends CommonTest {
 
+    private static final Logger logger = LogManager.getLogger(EmployeeAccountDaoImplTest.class);
+
     @Autowired
     private EmployeeAccountDao employeeAccountDao;
+
+    @Autowired
+    private EmployeeDao employeeDao;
 
     @Before
     public void setUp() throws Exception {
@@ -35,11 +44,13 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
     @Test
     public void testPersist() throws Exception {
         try {
+            Employee employee = employeeDao.get(4);
+            assertNotNull(employee);
             EmployeeAccount employeeAccount = new EmployeeAccount();
-            employeeAccount.setUsername("djk123");
+            employeeAccount.setUsername("hs0116");
             employeeAccount.setPassword("test123");
-            employeeAccount.setRole("ADMIN");
-            employeeAccount.setEmployeeId(1);
+            employeeAccount.setRole("TECHNICIAN");
+            employeeAccount.setEmployeeId(employee.getEmployeeId());
             employeeAccount.setCreatedBy("djk123");
             employeeAccount.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             employeeAccountDao.persist(employeeAccount);
@@ -47,7 +58,6 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
         } catch (Exception e) {
             fail("Exception: " + e);
         }
-
     }
 
     @Test
@@ -75,6 +85,21 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
         try {
             List<EmployeeAccount> employeeAccountList = employeeAccountDao.getAll();
             assertNotNull(employeeAccountList);
+            logger.info("Size: " + employeeAccountList.size());
+            for (EmployeeAccount employeeAccount: employeeAccountList) {
+                logger.info(employeeAccount.toString());
+            }
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
+    @Test
+    public void testGetByUsername() {
+        try {
+            EmployeeAccount employeeAccount = employeeAccountDao.getByUsername("djk123");
+            assertNotNull(employeeAccount);
+            logger.info(employeeAccount.toString());
         } catch (Exception e) {
             fail("Exception: " + e);
         }
