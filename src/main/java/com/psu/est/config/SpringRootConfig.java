@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Import;
 })
 @Import(value = {
         DataSourceConfig.class,
-        SpringSecurityConfig.class
-})
+        SpringSecurityConfig.class })
 public class SpringRootConfig {
 }
