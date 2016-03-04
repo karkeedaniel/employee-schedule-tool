@@ -1,7 +1,7 @@
 package com.psu.est.controller;
 
 import com.psu.est.model.Employee;
-import com.psu.est.service.EmployeeDetailService;
+import com.psu.est.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,10 +16,10 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeDetailService employee;
+    private EmployeeService employeeService;
 
     @RequestMapping(value = "/employee/get-all/", method = RequestMethod.GET)
     public List<Employee> getAll() {
-        return employee.getAll();
+        return employeeService.getAll();
     }
 }
