@@ -3,19 +3,34 @@ package com.psu.est.model;
 import com.psu.est.model.JobAssignment;
 import com.psu.est.model.interfaces.DomainObject;
 
+import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.List;
 
 /**
  * Created by Nana on 3/4/2016.
  */
+@Entity
 public class Schedule implements DomainObject{
 
+    private Long scheduleId;
     private LocalTime startTime;
     private Location location;
     private JobAssignment jobAssignment;
     private List<Employee> numberOfEmployees;
 
+    @Id
+    @GeneratedValue
+    @Column(name = "scheduleId")
+    public Long getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(Long scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    @Column(name = "start_time")
     public LocalTime getStartTime() {
         return startTime;
     }
@@ -24,6 +39,7 @@ public class Schedule implements DomainObject{
         this.startTime = startTime;
     }
 
+    @Column(name = "location")
     public Location getLocation() {
         return location;
     }
