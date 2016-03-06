@@ -10,7 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -38,10 +40,14 @@ public class EmployeeDaoImplTest extends CommonTest {
     public void testPersist() {
         try {
             Employee employee = new Employee();
-            employee.setFirstName("Daniel");
-            employee.setMiddleInitial('J');
-            employee.setLastName("Karkee");
-            employee.setContact("223293812");
+            employee.setFirstName("Homer");
+            employee.setLastName("Simpson");
+            employee.setContact("3204837293");
+            employee.setEmail("hs0116@est.com");
+            employee.setGender("Male");
+            employee.setCreatedBy("hs0116");
+            employee.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+            employee.setDob(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             employeeDao.persist(employee);
             assertNotEquals(0, employee.getEmployeeId());
         } catch (Exception e) {
@@ -51,6 +57,17 @@ public class EmployeeDaoImplTest extends CommonTest {
 
     @Test
     public void testUpdate() throws Exception {
+        try {
+            Employee employee = employeeDao.get(1);
+            assertNotNull(employee);
+            logger.info(employee.toString());
+            employee.setEmail("djk0116@est.com");
+            employeeDao.update(employee);
+            assertEquals("djk0116@est.com", employee.getEmail());
+            logger.info(employee.toString());
+        } catch (Exception e) {
+            fail("Excetion: " + e);
+        }
 
     }
 

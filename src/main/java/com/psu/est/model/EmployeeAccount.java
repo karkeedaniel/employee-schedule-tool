@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  * Created by danielkarkee on 2/3/16.
  */
 @Entity
-@Table(name = "employee_account", schema = "est", catalog = "")
+@Table(name = "employee_account", schema = "est")
 public class EmployeeAccount implements DomainObject {
 
     private int employeeAccountId;
@@ -157,5 +157,21 @@ public class EmployeeAccount implements DomainObject {
         result = 31 * result + (dateModified != null ? dateModified.hashCode() : 0);
         result = 31 * result + employeeId;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeAccount{" +
+                "employeeAccountId=" + employeeAccountId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", salary=" + salary +
+                ", createdBy='" + createdBy + '\'' +
+                ", dateCreated=" + dateCreated +
+                ", modifiedBy='" + modifiedBy + '\'' +
+                ", dateModified=" + dateModified +
+                ", employeeId=" + employeeId +
+                '}';
     }
 }

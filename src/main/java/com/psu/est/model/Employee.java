@@ -183,4 +183,22 @@ public class Employee implements DomainObject {
         result = 31 * result + (dateModified != null ? dateModified.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + employeeId +
+                ", firstName='" + firstName + '\'' +
+                ", middleInitial=" + middleInitial +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", contact='" + contact + '\'' +
+                ", dob=" + dob +
+                ", createdBy='" + createdBy + '\'' +
+                ", dateCreated=" + dateCreated +
+                ", modifiedBy='" + modifiedBy + '\'' +
+                ", dateModified=" + dateModified +
+                '}';
+    }
 }
