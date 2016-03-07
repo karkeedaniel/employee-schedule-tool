@@ -7,6 +7,10 @@ angular.module("estApp")
             templateUrl: "login"
         });
 
+        $routeProvider.when("/technician", {
+            templateUrl: "technician"
+        });
+
         $routeProvider.otherwise({
            templateUrl: "login"
         });

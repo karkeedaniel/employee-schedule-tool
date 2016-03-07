@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -103,5 +104,19 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
         } catch (Exception e) {
             fail("Exception: " + e);
         }
+    }
+
+    @Test
+    public void testName() throws Exception {
+        int i = 0;
+        while (i < 10) {
+            String password = "test123";
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(password);
+
+            System.out.println(hashedPassword);
+            i++;
+        }
+
     }
 }

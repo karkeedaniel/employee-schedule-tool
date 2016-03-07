@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <title>Employee Schedule Tool</title>
         <spring:url value="/resources/js/est.js" var="estJS" />
+        <spring:url value="/resources/js/auth.js" var="authJS" />
 
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -20,12 +21,14 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
         <script>
             angular.module("estApp", ["ngRoute"]);
         </script>
 
         <script src="${estJS}"></script>
+        <script src="${authJS}"></script>
 
     </head>
     <body>

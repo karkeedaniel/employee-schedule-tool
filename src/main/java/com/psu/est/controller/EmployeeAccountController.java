@@ -22,4 +22,5 @@ public class EmployeeAccountController {
     public List<EmployeeAccount> getAll() {
         return employeeAccountService.getAll();
     }
+
 }
