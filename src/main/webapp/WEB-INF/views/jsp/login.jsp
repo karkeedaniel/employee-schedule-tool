@@ -19,7 +19,7 @@
                         <div class="alert alert-danger" ng-show="error">
                             There was a problem logging in. Please try again.
                         </div>
-                        <form ng-submit="login(credentials)" novalidate>
+                        <form name="authForm" ng-submit="login(credentials)" novalidate>
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-addon"><i class="fa fa-user"></i></div>
@@ -33,7 +33,7 @@
                                 <br/>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-primary btn-block">
+                                        <button type="submit" class="btn btn-primary btn-block" ng-disabled="authForm.$invalid">
                                             Log in
                                         </button>
                                     </div>
@@ -42,12 +42,12 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="text-center">
-                                            <a href="#" class="btn btn-success btn-block">Register</a>
+                                            <a href="#" class="btn btn-success btn-block" ng-click="test()">Register</a>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-center">
-                                            <a href="#" class="btn btn-warning btn-block">Forgot your password?</a>
+                                            <a href="#" class="btn btn-warning btn-block">Reset Password</a>
                                         </div>
                                     </div>
                                 </div>

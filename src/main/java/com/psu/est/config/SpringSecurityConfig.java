@@ -45,12 +45,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and().authorizeRequests()
-                .antMatchers("/resources/**", "/index**", "/login**").permitAll()
-                .antMatchers("/technician/**").access("hasRole('TECHNICIAN')")
+//                .antMatchers("/technician/**").access("hasRole('TECHNICIAN')")
+                .antMatchers("/resources/**", "/index**").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login").permitAll().usernameParameter("username").passwordParameter("password").successHandler(successHandler)
+                .and().formLogin().loginPage("/login").permitAll().usernameParameter("username").passwordParameter("password").successHandler(successHandler).failureUrl("/login?error")
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
-                .and().logout().permitAll()
+                .and().logout().logoutSuccessUrl("/login").permitAll()
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
     }
 

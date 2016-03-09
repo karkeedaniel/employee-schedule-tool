@@ -1,5 +1,7 @@
 package com.psu.est.filter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
@@ -16,15 +18,17 @@ import java.io.IOException;
  */
 public class CsrfHeaderFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LogManager.getLogger(CsrfHeaderFilter.class);
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-                .getName());
+        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {
             Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
             String token = csrf.getToken();
-            if (cookie==null || token!=null && !token.equals(cookie.getValue())) {
+            if (cookie == null || token != null && !token.equals(cookie.getValue())) {
                 cookie = new Cookie("XSRF-TOKEN", token);
                 cookie.setPath("/");
                 response.addCookie(cookie);

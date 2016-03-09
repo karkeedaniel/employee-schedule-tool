@@ -17,7 +17,7 @@ import java.security.Principal;
 public class LoginController {
 
     @RequestMapping(value = "/technician", method = RequestMethod.GET)
-    public ModelAndView technicianPage() {
+    public ModelAndView technicianPage(ModelMap model) {
         ModelAndView mav = new ModelAndView("technician");
         mav.addObject("user", getPrincipal());
         return mav;

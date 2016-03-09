@@ -31,14 +31,20 @@
         <script src="${authJS}"></script>
 
     </head>
-    <body>
-        <div class="container-fluid">
-            <div class="navbar navbar-inverse navbar-static-top">
+    <body ng-controller="estController">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">EMPLOYEE SCHEDULE TOOL</a>
                 </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav nav-navbar navbar-right" ng-show="authenticated">
+                        <li class="btn"><a href="" ng-click="logout()">Logout</a></li>
+                    </ul>
+                </div>
             </div>
-            <ng-view />
-        </div>
+        </nav>
+        <div class="container-fluid" ng-view></div>
     </body>
 </html>
+

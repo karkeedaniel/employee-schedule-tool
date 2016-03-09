@@ -1,6 +1,6 @@
 angular.module("estApp")
-    .controller("authController", function($scope, $http, $location) {
-        $scope.login = function(credentials) {
+    .controller("authController", function($rootScope, $scope, $http, $location) {
+        var authenticate = function(credentials, callback) {
             $http({
                 method: "post",
                 url: "login",
@@ -12,6 +12,32 @@ angular.module("estApp")
                     username: credentials.username,
                     password: credentials.password
                 })
+            }).then(function successCallback() {
+                $location.path("/technician");
+                console.log($location.path());
+
+                $rootScope.authenticated = true;
+                callback && callback();
+
+            }, function errorCallback() {
+                $rootScope.authenticated = false;
+                callback && callback();
+            })
+        };
+
+        $scope.login = function(credentials) {
+            authenticate(credentials, function() {
+                $scope.error = !$rootScope.authenticated;
             });
-        }
+        };
+
+        $scope.test = function() {
+            $http({
+                method: "get",
+                url: "technician",
+                data: {
+                    user: "djk"
+                }
+            });
+        };
     });
