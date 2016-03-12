@@ -8,30 +8,48 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <body>
-        <div class="row">
+        <div class="row" ng-controller="authController">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading text-center">
-                        Sign in
+                        <strong>Log in to EST</strong>
                     </div>
                     <div class="panel-body">
-                        <form novalidate>
+                        <div class="alert alert-danger" ng-show="error">
+                            There was a problem logging in. Please try again.
+                        </div>
+                        <form name="authForm" ng-submit="login(credentials)" novalidate>
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                    <input type="text" class="form-control" placeholder="Username" required>
+                                    <input type="text" name="username" class="form-control" placeholder="Username" ng-model="credentials.username" required>
                                 </div>
                                 <br/>
                                 <div class="input-group">
                                     <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-                                    <input type="password" class="form-control" placeholder="Password" required>
+                                    <input type="password" name="password" class="form-control" placeholder="Password" ng-model="credentials.password" required>
                                 </div>
                                 <br/>
-                                <div class="text-center">
-                                    <button class="btn btn-primary">
-                                        <i class="fa fa-sign-in"></i> Log In
-                                    </button>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary btn-block" ng-disabled="authForm.$invalid">
+                                            Log in
+                                        </button>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <a href="#" class="btn btn-success btn-block" ng-click="test()">Register</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <a href="#" class="btn btn-warning btn-block">Reset Password</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>

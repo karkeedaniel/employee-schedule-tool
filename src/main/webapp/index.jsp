@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <title>Employee Schedule Tool</title>
         <spring:url value="/resources/js/est.js" var="estJS" />
+        <spring:url value="/resources/js/auth.js" var="authJS" />
 
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -20,22 +21,30 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
         <script>
             angular.module("estApp", ["ngRoute"]);
         </script>
 
         <script src="${estJS}"></script>
+        <script src="${authJS}"></script>
 
     </head>
-    <body>
-        <div class="container-fluid">
-            <div class="navbar navbar-inverse navbar-static-top">
+    <body ng-controller="estController">
+        <nav class="navbar navbar-inverse navbar-static-top">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#">EMPLOYEE SCHEDULE TOOL</a>
                 </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav nav-navbar navbar-right" ng-show="authenticated">
+                        <li class="btn"><a href="" ng-click="logout()">Logout</a></li>
+                    </ul>
+                </div>
             </div>
-            <ng-view />
-        </div>
+        </nav>
+        <div class="container-fluid" ng-view></div>
     </body>
 </html>
+
