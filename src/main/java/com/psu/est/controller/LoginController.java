@@ -17,10 +17,20 @@ import java.security.Principal;
 public class LoginController {
 
     @RequestMapping(value = "/technician", method = RequestMethod.GET)
-    public ModelAndView technicianPage(ModelMap model) {
+    public ModelAndView technicianPage() {
         ModelAndView mav = new ModelAndView("technician");
         mav.addObject("user", getPrincipal());
         return mav;
+    }
+
+    @RequestMapping(value = "/reset", method = RequestMethod.GET)
+    public ModelAndView resetPasswordPage() {
+        return new ModelAndView("reset");
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public ModelAndView registerPage() {
+        return new ModelAndView("register");
     }
 
     private String getPrincipal() {

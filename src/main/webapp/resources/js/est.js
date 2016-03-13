@@ -8,7 +8,16 @@ angular.module("estApp")
         });
 
         $routeProvider.when("/technician", {
-            templateUrl: "technician"
+            templateUrl: "technician",
+            controller: "techCtrl"
+        });
+
+        $routeProvider.when("/reset", {
+            templateUrl: "reset"
+        });
+
+        $routeProvider.when("/register", {
+            templateUrl: "register"
         });
 
         $routeProvider.otherwise({
@@ -17,16 +26,12 @@ angular.module("estApp")
 
         $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
     })
-    .controller("estController", function($rootScope, $scope, $http, $location) {
+    .controller("estCtrl", function($rootScope, $scope, $http, $location) {
         $scope.logout = function () {
             $http.post('logout', {}).success(function () {
-                $rootScope.authenticated = false;
                 $location.path("/");
-            }).error(function (data) {
+            }).success(function () {
                 $rootScope.authenticated = false;
             });
         };
-    })
-    .controller("technicianController", function() {
-        console.log("technicianController")
     });

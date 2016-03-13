@@ -9,9 +9,13 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,15 +33,18 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(authentication);
-
         if (response.isCommitted()) {
             logger.info("Cannot redirect");
             return;
         }
-
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        JsonObject json = Json.createObjectBuilder()
+                .add("url", targetUrl).build();
+        response.setContentType("application/json");// set content to json
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
     }
 
     /*
@@ -45,16 +52,11 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
      * appropriate URL according to his/her role.
      */
     protected String determineTargetUrl(Authentication authentication) {
-        String url;
-
+        String url = "";
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
         List<String> roles = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-
         if (isTechnician(roles)) {
             url = "/technician";
-        } else {
-            url = "/accessDenied";
         }
         return url;
     }

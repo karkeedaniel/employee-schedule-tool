@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <body>
-        <div class="row" ng-controller="authController">
+        <div class="row" ng-controller="authCtrl">
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <div class="panel panel-primary">
@@ -42,12 +42,12 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="text-center">
-                                            <a href="#" class="btn btn-success btn-block" ng-click="test()">Register</a>
+                                            <a href="#/register" class="btn btn-success btn-block">Register</a>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-center">
-                                            <a href="#" class="btn btn-warning btn-block">Reset Password</a>
+                                            <a href="#/reset" class="btn btn-warning btn-block">Reset Password</a>
                                         </div>
                                     </div>
                                 </div>
