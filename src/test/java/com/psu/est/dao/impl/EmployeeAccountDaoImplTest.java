@@ -45,7 +45,7 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
     @Test
     public void testPersist() throws Exception {
         try {
-            Employee employee = employeeDao.get(4);
+            Employee employee = employeeDao.get(1);
             assertNotNull(employee);
             EmployeeAccount employeeAccount = new EmployeeAccount();
             employeeAccount.setUsername("hs0116");

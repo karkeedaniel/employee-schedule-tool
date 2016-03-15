@@ -4,6 +4,9 @@ import com.psu.est.model.interfaces.DomainObject;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 /**
@@ -12,21 +15,24 @@ import java.io.Serializable;
 @Entity
 public class Job implements DomainObject {
 
+
     private Integer jobId;
     private String jobName;
     private Integer jobLocation;
     private String jobPhone;
-    private java.sql.Date jobBookDate;
-    private java.sql.Date jobDate;
+    private Timestamp jobBookDate;
+    private Timestamp jobDate;
     private Integer jobDuration;
     private Integer jobLevel;
     private String jobState;
     private String siteContactName;
     private String siteContactPhone;
+    //private java.time.LocalDateTime jobBookDate;
+    //private java.time.LocalDateTime jobDate;
 
     @Id
     @GeneratedValue
-    @Column(name = "job_id")
+    @Column(name = "job_id", nullable = false)
     public Integer getJobId() {
         return jobId;
     }
@@ -36,7 +42,7 @@ public class Job implements DomainObject {
     }
 
     @Basic
-    @Column(name = "job_name")
+    @Column(name = "job_name", nullable = true, length = 45)
     public String getJobName() {
         return jobName;
     }
@@ -67,21 +73,21 @@ public class Job implements DomainObject {
 
     @Basic
     @Column(name = "job_book_date", nullable = true)
-    public java.sql.Date getJobBookDate() {
+    public Timestamp getJobBookDate() {
         return jobBookDate;
     }
 
-    public void setJobBookDate(java.sql.Date jobBookDate) {
+    public void setJobBookDate(Timestamp jobBookDate) {
         this.jobBookDate = jobBookDate;
     }
 
     @Basic
     @Column(name = "job_date", nullable = true)
-    public java.sql.Date getJobDate() {
+    public Timestamp getJobDate() {
         return jobDate;
     }
 
-    public void setJobDate(java.sql.Date jobDate) {
+    public void setJobDate(Timestamp jobDate) {
         this.jobDate = jobDate;
     }
 
