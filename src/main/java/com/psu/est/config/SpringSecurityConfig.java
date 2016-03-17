@@ -1,7 +1,8 @@
 package com.psu.est.config;
 
 import com.psu.est.filter.CsrfHeaderFilter;
-import com.psu.est.handler.SuccessHandler;
+import com.psu.est.handler.LoginSuccessHandler;
+import com.psu.est.handler.LogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,8 +19,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-import javax.sql.DataSource;
-
 /**
  * Created by danielkarkee on 2/6/16.
  */
@@ -35,7 +34,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private SuccessHandler successHandler;
+    private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -53,12 +55,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/index**", "/reset", "/register", "/lgoin**").permitAll()
+                .antMatchers("/index**", "/reset", "/register", "/login**").permitAll()
                 .antMatchers("/technician/**").hasAuthority("TECHNICIAN")
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login").permitAll().usernameParameter("username").passwordParameter("password").successHandler(successHandler).failureUrl("/login?error")
+                .and().formLogin().loginPage("/login").permitAll().usernameParameter("username").passwordParameter("password").successHandler(loginSuccessHandler).failureUrl("/login?error")
                 .and().csrf().csrfTokenRepository(csrfTokenRepository())
-                .and().logout().permitAll().invalidateHttpSession(true).logoutSuccessUrl("/login")
+                .and().logout().permitAll().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler)
                 .and().addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
     }
 

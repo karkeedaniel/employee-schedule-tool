@@ -4,8 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +24,9 @@ import java.util.stream.Collectors;
  * Created by danielkarkee on 3/5/16.
  */
 @Component
+public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-    private static final Logger logger = LogManager.getLogger(SuccessHandler.class);
-
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private static final Logger logger = LogManager.getLogger(LoginSuccessHandler.class);
 
     @Override
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -40,7 +36,9 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             return;
         }
         JsonObject json = Json.createObjectBuilder()
-                .add("url", targetUrl).build();
+                .add("url", targetUrl)
+                .add("user", getPrincipal())
+                .build();
         response.setContentType("application/json");// set content to json
         PrintWriter out = response.getWriter();
         out.print(json);
@@ -65,12 +63,16 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         return roles.contains("TECHNICIAN");
     }
 
-    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
+    private String getPrincipal() {
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails)principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        return userName;
     }
 
 }

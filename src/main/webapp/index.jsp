@@ -7,6 +7,7 @@
         <spring:url value="/resources/js/est.js" var="estJS" />
         <spring:url value="/resources/js/auth.js" var="authJS" />
         <spring:url value="/resources/js/tech.js" var="techJS" />
+        <spring:url value="/resources/js/schedule.js" var="scheduleJS" />
 
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -18,31 +19,44 @@
               crossorigin="anonymous">
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet"
+              href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
 
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script src="http://dt.ishraf.com/bower_components/angular-datatables/dist/angular-datatables.js"></script>
 
         <script>
-            angular.module("estApp", ["ngRoute", "ngCookies"]);
+            angular.module("estApp", ["ngRoute", "datatables"]);
         </script>
 
         <script src="${estJS}"></script>
         <script src="${authJS}"></script>
         <script src="${techJS}"></script>
+        <script src="${scheduleJS}"></script>
 
     </head>
     <body ng-controller="estCtrl">
-        <nav class="navbar navbar-inverse navbar-static-top">
+        <nav class="navbar navbar-default navbar-static-top">
             <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <a class="navbar-brand" href="#">EMPLOYEE SCHEDULE TOOL</a>
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav nav-navbar navbar-right" ng-show="authenticated">
-                        <li class="btn"><a href="" ng-click="logout()">Logout</a></li>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right" ng-show="authenticated">
+                        <%--<li><a href="">Show Location</a></li>--%>
+                        <li><a href="" ng-click="logout()">Logout</a></li>
                     </ul>
                 </div>
             </div>

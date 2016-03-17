@@ -14,6 +14,7 @@ angular.module("estApp")
                 })
             }).then(function successCallback(response) {
                 $location.path(response.data.url);
+                $rootScope.user = response.data.user;
                 $rootScope.authenticated = true;
                 callback && callback();
             }, function errorCallback() {
