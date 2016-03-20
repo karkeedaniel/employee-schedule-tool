@@ -3,6 +3,8 @@ package com.psu.est.dao.impl;
 import com.psu.est.dao.common.GenericDaoImpl;
 import com.psu.est.dao.interfaces.EmployeeAccountDao;
 import com.psu.est.model.EmployeeAccount;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +21,19 @@ public class EmployeeAccountDaoImpl extends GenericDaoImpl<EmployeeAccount> impl
     }
 
     @Override
+    public EmployeeAccount getByUsernameAndStatus(String username, String status) throws DataAccessException {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EmployeeAccount.class, "employeeAccount");
+        criteria.createAlias("employeeAccount.employee", "employee")
+                .add(Restrictions.eq("username", username))
+                .add(Restrictions.eq("employee.status", status));
+        return (EmployeeAccount) criteria.uniqueResult();
+    }
+
+    @Override
     public EmployeeAccount getByUsername(String username) throws DataAccessException {
-        return (EmployeeAccount) sessionFactory.getCurrentSession()
-                .createQuery("from EmployeeAccount where username = :username")
-                .setParameter("username", username).uniqueResult();
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EmployeeAccount.class, "employeeAccount");
+        criteria.createAlias("employeeAccount.employee", "employee")
+                .add(Restrictions.eq("username", username));
+        return (EmployeeAccount) criteria.uniqueResult();
     }
 }

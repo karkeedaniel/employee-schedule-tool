@@ -12,6 +12,15 @@ public interface EmployeeAccountDao extends GenericDao<EmployeeAccount> {
     /**
      *
      * @param username
+     * @param status
+     * @return
+     * @throws DataAccessException
+     */
+    EmployeeAccount getByUsernameAndStatus(String username, String status) throws DataAccessException;
+
+    /**
+     *
+     * @param username
      * @return
      * @throws DataAccessException
      */

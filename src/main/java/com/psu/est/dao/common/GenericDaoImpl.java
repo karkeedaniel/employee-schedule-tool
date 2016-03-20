@@ -25,16 +25,14 @@ public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
     }
 
     @Override
-    public T persist(T object) throws DataAccessException {
+    public void persist(T object) throws DataAccessException {
         sessionFactory.getCurrentSession().persist(object);
-        return object;
 
     }
 
     @Override
-    public T update(T object) throws DataAccessException {
+    public void update(T object) throws DataAccessException {
         sessionFactory.getCurrentSession().update(object);
-        return object;
     }
 
     @Override

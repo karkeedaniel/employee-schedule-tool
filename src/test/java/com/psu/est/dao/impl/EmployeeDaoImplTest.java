@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -40,16 +41,23 @@ public class EmployeeDaoImplTest extends CommonTest {
     public void testPersist() {
         try {
             Employee employee = new Employee();
+            employee.setEmployeeNum("A7304BD");
             employee.setFirstName("Homer");
+            employee.setMiddleIntial("J");
             employee.setLastName("Simpson");
-            employee.setContact("3204837293");
-            employee.setEmail("hs0116@est.com");
+            employee.setContact("458372625");
+            employee.setEmail("hjs0116@est.com");
             employee.setGender("Male");
-            employee.setCreatedBy("hs0116");
-            employee.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-            employee.setDob(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.set(1982, 5, 15);
+            employee.setDob(new Timestamp(calendar.getTimeInMillis()));
+            employee.setSsn("123456789");
+            employee.setRole("MANAGER");
+            employee.setStatus("ACTIVE");
             employeeDao.persist(employee);
+            assertNotNull(employee);
             assertNotEquals(0, employee.getEmployeeId());
+            logger.info(employee.toString());
         } catch (Exception e) {
             fail("Exception: " + e);
         }
@@ -96,16 +104,6 @@ public class EmployeeDaoImplTest extends CommonTest {
             for (Employee employee: employeeList) {
                 logger.info(employee.toString());
             }
-        } catch (Exception e) {
-            fail("Exception: " + e);
-        }
-    }
-
-    @Test
-    public void testGetListByRole() {
-        try {
-            List<Employee> employeeList = employeeDao.getListByRole("TECHNICIAN");
-            assertNotNull(employeeList);
         } catch (Exception e) {
             fail("Exception: " + e);
         }

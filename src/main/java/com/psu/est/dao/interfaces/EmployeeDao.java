@@ -11,5 +11,4 @@ import java.util.List;
  */
 public interface EmployeeDao extends GenericDao<Employee> {
 
-    List<Employee> getListByRole(String role) throws DataAccessException;
 }

@@ -33,7 +33,6 @@
     </build>
 
     <properties>
-        <javax.json.version>1.0.4</javax.json.version>
         <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
         <org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
         <org.hibernate.version>4.3.6.Final</org.hibernate.version>
@@ -64,11 +63,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>${javax.json.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>

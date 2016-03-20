@@ -7,9 +7,8 @@ angular.module("estApp")
             templateUrl: "login"
         });
 
-        $routeProvider.when("/technician", {
-            templateUrl: "technician",
-            controller: "techCtrl"
+        $routeProvider.when("/mgr", {
+            templateUrl: "mgr"
         });
 
         $routeProvider.when("/reset", {
@@ -29,8 +28,9 @@ angular.module("estApp")
     .controller("estCtrl", function($rootScope, $scope, $http, $location) {
         $scope.logout = function () {
             $http.post('logout', {}).success(function () {
-                $location.path("/");
-            }).success(function () {
+                $rootScope.authenticated = false;
+                $location.path("/login");
+            }).error(function () {
                 $rootScope.authenticated = false;
             });
         };

@@ -19,9 +19,4 @@ public class EmployeeDaoImpl extends GenericDaoImpl<Employee> implements Employe
     public EmployeeDaoImpl() {
         super(Employee.class);
     }
-
-    @Override
-    public List<Employee> getListByRole(String role) throws DataAccessException {
-        return null;
-    }
 }

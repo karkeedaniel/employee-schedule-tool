@@ -1,6 +1,8 @@
 package com.psu.est.service;
 
 import com.psu.est.dao.interfaces.EmployeeAccountDao;
+import com.psu.est.dao.interfaces.EmployeeDao;
+import com.psu.est.model.Employee;
 import com.psu.est.model.EmployeeAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,14 +25,16 @@ import java.util.Set;
 @Service
 public class EmployeeDetailService implements UserDetailsService {
 
+    private static final String STATUS = "ACTIVE";
+
     @Autowired
     private EmployeeAccountDao employeeAccountDao;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        EmployeeAccount employeeAccount = employeeAccountDao.getByUsername(username);
-        List<GrantedAuthority> authorities = buildUserAuthority(employeeAccount.getRole());
+        EmployeeAccount employeeAccount = employeeAccountDao.getByUsernameAndStatus(username, STATUS);
+        List<GrantedAuthority> authorities = buildUserAuthority(employeeAccount.getEmployee().getRole());
         return buildUserForAuthentication(employeeAccount, authorities);
     }
 

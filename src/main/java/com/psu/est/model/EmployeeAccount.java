@@ -1,9 +1,11 @@
 package com.psu.est.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.psu.est.model.interfaces.DomainObject;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 /**
  * Created by danielkarkee on 2/3/16.
@@ -12,110 +14,15 @@ import java.sql.Timestamp;
 @Table(name = "employee_account", schema = "est")
 public class EmployeeAccount implements DomainObject {
 
-    private int employeeAccountId;
+    private int employeeId;
     private String username;
     private String password;
-    private String role;
-    private int salary;
-    private String createdBy;
-    private Timestamp dateCreated;
-    private String modifiedBy;
-    private Timestamp dateModified;
-    private int employeeId;
+    private Employee employee;
 
     @Id
-    @GeneratedValue
-    @Column(name = "employee_account_id")
-    public int getEmployeeAccountId() {
-        return employeeAccountId;
-    }
-
-    public void setEmployeeAccountId(int employeeAccountId) {
-        this.employeeAccountId = employeeAccountId;
-    }
-
-    @Basic
-    @Column(name = "username")
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Basic
-    @Column(name = "password")
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Basic
-    @Column(name = "role")
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    @Basic
-    @Column(name = "salary")
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    @Basic
-    @Column(name = "created_by")
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    @Basic
-    @Column(name = "date_created")
-    public Timestamp getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    @Basic
-    @Column(name = "modified_by")
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    @Basic
-    @Column(name = "date_modified")
-    public Timestamp getDateModified() {
-        return dateModified;
-    }
-
-    public void setDateModified(Timestamp dateModified) {
-        this.dateModified = dateModified;
-    }
-
-    @Basic
-    @Column(name = "employee_id")
+    @Column(name = "employee_id", nullable = false)
+    @GeneratedValue(generator = "generator")
+    @GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name="property", value="employee"))
     public int getEmployeeId() {
         return employeeId;
     }
@@ -124,54 +31,44 @@ public class EmployeeAccount implements DomainObject {
         this.employeeId = employeeId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EmployeeAccount that = (EmployeeAccount) o;
-
-        if (employeeAccountId != that.employeeAccountId) return false;
-        if (salary != that.salary) return false;
-        if (employeeId != that.employeeId) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (role != null ? !role.equals(that.role) : that.role != null) return false;
-        if (createdBy != null ? !createdBy.equals(that.createdBy) : that.createdBy != null) return false;
-        if (dateCreated != null ? !dateCreated.equals(that.dateCreated) : that.dateCreated != null) return false;
-        if (modifiedBy != null ? !modifiedBy.equals(that.modifiedBy) : that.modifiedBy != null) return false;
-        return dateModified != null ? dateModified.equals(that.dateModified) : that.dateModified == null;
-
+    @Basic
+    @Column(name = "username", nullable = false, length = 45)
+    public String getUsername() {
+        return username;
     }
 
-    @Override
-    public int hashCode() {
-        int result = employeeAccountId;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + salary;
-        result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
-        result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
-        result = 31 * result + (modifiedBy != null ? modifiedBy.hashCode() : 0);
-        result = 31 * result + (dateModified != null ? dateModified.hashCode() : 0);
-        result = 31 * result + employeeId;
-        return result;
+    public void setUsername(String username) {
+        this.username = username.toLowerCase();
+    }
+
+    @Basic
+    @Column(name = "password", nullable = false, length = 80)
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    @JsonIgnore
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     @Override
     public String toString() {
         return "EmployeeAccount{" +
-                "employeeAccountId=" + employeeAccountId +
+                "employeeId=" + employeeId +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                ", salary=" + salary +
-                ", createdBy='" + createdBy + '\'' +
-                ", dateCreated=" + dateCreated +
-                ", modifiedBy='" + modifiedBy + '\'' +
-                ", dateModified=" + dateModified +
-                ", employeeId=" + employeeId +
                 '}';
     }
 }

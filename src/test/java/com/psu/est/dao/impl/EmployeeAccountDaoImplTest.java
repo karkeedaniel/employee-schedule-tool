@@ -45,17 +45,17 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
     @Test
     public void testPersist() throws Exception {
         try {
-            Employee employee = employeeDao.get(4);
+            Employee employee = employeeDao.get(1);
             assertNotNull(employee);
             EmployeeAccount employeeAccount = new EmployeeAccount();
             employeeAccount.setUsername("hs0116");
-            employeeAccount.setPassword("test123");
-            employeeAccount.setRole("TECHNICIAN");
-            employeeAccount.setEmployeeId(employee.getEmployeeId());
-            employeeAccount.setCreatedBy("djk123");
-            employeeAccount.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            employeeAccount.setPassword(passwordEncoder.encode("test123"));
+            employeeAccount.setEmployee(employee);
             employeeAccountDao.persist(employeeAccount);
-            assertNotEquals(0, employeeAccount.getEmployeeAccountId());
+            assertNotNull(employeeAccount);
+            assertNotEquals(0, employeeAccount.getEmployeeId());
+            logger.info(employeeAccount.toString());
         } catch (Exception e) {
             fail("Exception: " + e);
         }
@@ -63,7 +63,14 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
 
     @Test
     public void testUpdate() throws Exception {
-
+        EmployeeAccount employeeAccount = employeeAccountDao.get(1);
+        assertNotNull(employeeAccount);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        employeeAccount.setPassword(passwordEncoder.encode("test1234"));
+        employeeAccountDao.update(employeeAccount);
+        assertNotNull(employeeAccount);
+        assertNotEquals(0, employeeAccount.getEmployeeId());
+        logger.info(employeeAccount.toString());
     }
 
     @Test
@@ -99,6 +106,17 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
     public void testGetByUsername() {
         try {
             EmployeeAccount employeeAccount = employeeAccountDao.getByUsername("djk123");
+            assertNotNull(employeeAccount);
+            logger.info(employeeAccount.toString());
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
+    @Test
+    public void testGetByUsernameAndStatus() {
+        try {
+            EmployeeAccount employeeAccount = employeeAccountDao.getByUsernameAndStatus("hs0116", "ACTIVE");
             assertNotNull(employeeAccount);
             logger.info(employeeAccount.toString());
         } catch (Exception e) {

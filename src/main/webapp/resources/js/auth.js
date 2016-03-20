@@ -1,20 +1,20 @@
+/**
+ * Created by danielkarkee on 3/2/16.
+ */
 angular.module("estApp")
     .controller("authCtrl", function($rootScope, $scope, $http, $location) {
+        var url;
+
         var authenticate = function(credentials, callback) {
+
+            $http.defaults.headers.common['authorization'] = "Basic " + btoa(credentials.username + ":" + credentials.password);
+
             $http({
-                method: "post",
-                url: "login",
-                headers: {
-                    'authorization': "Basic " + btoa(credentials.username + ":" + credentials.password),
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                data: $.param({
-                    username: credentials.username,
-                    password: credentials.password
-                })
+                method: "get",
+                url: "user-url"
             }).then(function successCallback(response) {
-                $location.path(response.data.url);
                 $rootScope.user = response.data.user;
+                url = response.data.url;
                 $rootScope.authenticated = true;
                 callback && callback();
             }, function errorCallback() {
@@ -25,7 +25,11 @@ angular.module("estApp")
 
         $scope.login = function(credentials) {
             authenticate(credentials, function() {
+                if ($rootScope.authenticated) {
+                    $location.path(url);
+                }
                 $scope.error = !$rootScope.authenticated;
             });
         };
+
     });

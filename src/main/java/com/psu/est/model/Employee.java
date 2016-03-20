@@ -1,5 +1,6 @@
 package com.psu.est.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.psu.est.model.interfaces.DomainObject;
 
 import javax.persistence.*;
@@ -10,22 +11,24 @@ import java.sql.Timestamp;
  */
 @Entity
 public class Employee implements DomainObject {
+
     private int employeeId;
+    private String employeeNum;
     private String firstName;
-    private char middleInitial;
+    private String middleIntial;
     private String lastName;
     private String email;
     private String gender;
     private String contact;
     private Timestamp dob;
-    private String createdBy;
-    private Timestamp dateCreated;
-    private String modifiedBy;
-    private Timestamp dateModified;
+    private String ssn;
+    private EmployeeAccount employeeAccount;
+    private String role;
+    private String status;
 
     @Id
     @GeneratedValue
-    @Column(name = "employee_id")
+    @Column(name = "employee_id", nullable = false)
     public int getEmployeeId() {
         return employeeId;
     }
@@ -35,7 +38,17 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "first_name")
+    @Column(name = "employee_num", nullable = false, length = 7)
+    public String getEmployeeNum() {
+        return employeeNum;
+    }
+
+    public void setEmployeeNum(String employeeNum) {
+        this.employeeNum = employeeNum;
+    }
+
+    @Basic
+    @Column(name = "first_name", nullable = false, length = 45)
     public String getFirstName() {
         return firstName;
     }
@@ -45,17 +58,17 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "middle_initial")
-    public char getMiddleInitial() {
-        return middleInitial;
+    @Column(name = "middle_intial", nullable = true, length = 1)
+    public String getMiddleIntial() {
+        return middleIntial;
     }
 
-    public void setMiddleInitial(char middleInitial) {
-        this.middleInitial = middleInitial;
+    public void setMiddleIntial(String middleIntial) {
+        this.middleIntial = middleIntial;
     }
 
     @Basic
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false, length = 45)
     public String getLastName() {
         return lastName;
     }
@@ -65,7 +78,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, length = 45)
     public String getEmail() {
         return email;
     }
@@ -75,7 +88,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = false, length = 10)
     public String getGender() {
         return gender;
     }
@@ -85,7 +98,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "contact")
+    @Column(name = "contact", nullable = false, length = 10)
     public String getContact() {
         return contact;
     }
@@ -95,7 +108,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "dob")
+    @Column(name = "dob", nullable = false)
     public Timestamp getDob() {
         return dob;
     }
@@ -105,100 +118,60 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "created_by")
-    public String getCreatedBy() {
-        return createdBy;
+    @Column(name = "ssn", nullable = false, length = 9)
+    public String getSsn() {
+        return ssn;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    @Basic
-    @Column(name = "date_created")
-    public Timestamp getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
     }
 
     @Basic
-    @Column(name = "modified_by")
-    public String getModifiedBy() {
-        return modifiedBy;
+    @Column(name = "role", nullable = false, length = 10)
+    public String getRole() {
+        return role;
     }
 
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
+    public void setRole(String role) {
+        this.role = role.toUpperCase();
     }
 
     @Basic
-    @Column(name = "date_modified")
-    public Timestamp getDateModified() {
-        return dateModified;
+    @Column(name = "status", nullable = false, length = 10)
+    public String getStatus() {
+        return status;
     }
 
-    public void setDateModified(Timestamp dateModified) {
-        this.dateModified = dateModified;
+    public void setStatus(String status) {
+        this.status = status.toUpperCase();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Employee employee = (Employee) o;
-
-        if (employeeId != employee.employeeId) return false;
-        if (middleInitial != employee.middleInitial) return false;
-        if (contact != null ? !contact.equals(employee.contact) : employee.contact != null) return false;
-        if (firstName != null ? !firstName.equals(employee.firstName) : employee.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(employee.lastName) : employee.lastName != null) return false;
-        if (email != null ? !email.equals(employee.email) : employee.email != null) return false;
-        if (gender != null ? !gender.equals(employee.gender) : employee.gender != null) return false;
-        if (dob != null ? !dob.equals(employee.dob) : employee.dob != null) return false;
-        if (createdBy != null ? !createdBy.equals(employee.createdBy) : employee.createdBy != null) return false;
-        if (dateCreated != null ? !dateCreated.equals(employee.dateCreated) : employee.dateCreated != null)
-            return false;
-        if (modifiedBy != null ? !modifiedBy.equals(employee.modifiedBy) : employee.modifiedBy != null) return false;
-        return dateModified != null ? dateModified.equals(employee.dateModified) : employee.dateModified == null;
-
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    public EmployeeAccount getEmployeeAccount() {
+        return employeeAccount;
     }
 
-    @Override
-    public int hashCode() {
-        int result = employeeId;
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (int) middleInitial;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (contact != null ? contact.hashCode() : 0);
-        result = 31 * result + (dob != null ? dob.hashCode() : 0);
-        result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
-        result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
-        result = 31 * result + (modifiedBy != null ? modifiedBy.hashCode() : 0);
-        result = 31 * result + (dateModified != null ? dateModified.hashCode() : 0);
-        return result;
+    public void setEmployeeAccount(EmployeeAccount employeeAccount) {
+        this.employeeAccount = employeeAccount;
     }
 
     @Override
     public String toString() {
         return "Employee{" +
                 "employeeId=" + employeeId +
+                ", employeeNum='" + employeeNum + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", middleInitial=" + middleInitial +
+                ", middleIntial='" + middleIntial + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
                 ", contact='" + contact + '\'' +
                 ", dob=" + dob +
-                ", createdBy='" + createdBy + '\'' +
-                ", dateCreated=" + dateCreated +
-                ", modifiedBy='" + modifiedBy + '\'' +
-                ", dateModified=" + dateModified +
+                ", ssn='" + ssn + '\'' +
+                ", role='" + role + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
