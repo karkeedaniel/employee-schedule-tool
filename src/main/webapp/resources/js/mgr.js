@@ -12,28 +12,56 @@ angular.module("estApp")
             $scope.employeeList = response.data;
         });
 
-        $scope.editable = function(employee, edit) {
-            console.log(employee);
+        $scope.editor = function(employee) {
             var modalInstance = $uibModal.open({
-                animation: edit,
-                templateUrl: 'empModalContent.html',
-                controller: 'ModalInstanceCtrl',
+                animation: true,
+                templateUrl: '/empModal',
+                controller: 'modalInstanceCtrl',
                 resolve: {
-                    items: function () {
-                        return $scope.items;
+                    employee: function () {
+                        return employee;
                     }
                 }
             });
         };
+
+        $scope.add = function() {
+            var employee = [];
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: '/addEmpModal',
+                controller: 'modalInstanceCtrl',
+                resolve: {
+                    employee: function () {
+                        return employee;
+                    }
+                }
+            })
+        }
     })
-    .controller('ModalInstanceCtrl', function ($scope, $uibModalInstance) {
+    .controller('modalInstanceCtrl', function ($scope, $http, $uibModalInstance, employee) {
+        $scope.employee = employee;
+
+        $scope.update = function(employee) {
+            $http({
+                method: "post",
+                url: "/employee/update",
+                data: employee
+            }).then(function successCallback(response) {
+                $scope.employee = response.data;
+            });
+        };
 
         $scope.ok = function () {
-            $uibModalInstance.close($scope.selected.item);
+            $uibModalInstance.close();
         };
 
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+        $scope.add = function(employee) {
+            console.log(employee);
+        }
     });
 

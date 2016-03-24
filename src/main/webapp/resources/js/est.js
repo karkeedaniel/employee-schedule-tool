@@ -19,6 +19,10 @@ angular.module("estApp")
             templateUrl: "register"
         });
 
+        $routeProvider.when("/empModal", {
+            templateUrl: "empModal"
+        });
+
         $routeProvider.otherwise({
            templateUrl: "login"
         });

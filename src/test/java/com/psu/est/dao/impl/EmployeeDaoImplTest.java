@@ -10,8 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -43,14 +42,14 @@ public class EmployeeDaoImplTest extends CommonTest {
             Employee employee = new Employee();
             employee.setEmployeeNum("A7304BD");
             employee.setFirstName("Homer");
-            employee.setMiddleIntial("J");
+            employee.setMiddleName("J");
             employee.setLastName("Simpson");
             employee.setContact("458372625");
             employee.setEmail("hjs0116@est.com");
             employee.setGender("Male");
             Calendar calendar = GregorianCalendar.getInstance();
             calendar.set(1982, 5, 15);
-            employee.setDob(new Timestamp(calendar.getTimeInMillis()));
+            employee.setDob(new Date(calendar.getTimeInMillis()));
             employee.setSsn("123456789");
             employee.setRole("MANAGER");
             employee.setStatus("ACTIVE");
@@ -93,6 +92,7 @@ public class EmployeeDaoImplTest extends CommonTest {
     public void testGet() throws Exception {
         Employee employee = employeeDao.get(1);
         assertNotNull(employee);
+        logger.info(employee);
     }
 
     @Test

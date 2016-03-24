@@ -16,7 +16,19 @@ public class EmployeeService {
     @Autowired
     private EmployeeDao employeeDao;
 
+    /**
+     *
+     * @return
+     */
     public List<Employee> getAll() {
         return employeeDao.getAll();
+    }
+
+    /**
+     *
+     * @param employee
+     */
+    public void update(Employee employee) {
+        employeeDao.update(employee);
     }
 }

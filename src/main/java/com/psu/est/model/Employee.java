@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.psu.est.model.interfaces.DomainObject;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 /**
  * Created by danielkarkee on 2/2/16.
@@ -15,12 +15,12 @@ public class Employee implements DomainObject {
     private int employeeId;
     private String employeeNum;
     private String firstName;
-    private String middleIntial;
+    private String middleName;
     private String lastName;
     private String email;
     private String gender;
     private String contact;
-    private Timestamp dob;
+    private Date dob;
     private String ssn;
     private EmployeeAccount employeeAccount;
     private String role;
@@ -58,13 +58,13 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "middle_intial", nullable = true, length = 1)
-    public String getMiddleIntial() {
-        return middleIntial;
+    @Column(name = "middle_name", nullable = true, length = 1)
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setMiddleIntial(String middleIntial) {
-        this.middleIntial = middleIntial;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     @Basic
@@ -109,11 +109,11 @@ public class Employee implements DomainObject {
 
     @Basic
     @Column(name = "dob", nullable = false)
-    public Timestamp getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(Timestamp dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 
@@ -163,7 +163,7 @@ public class Employee implements DomainObject {
                 "employeeId=" + employeeId +
                 ", employeeNum='" + employeeNum + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", middleIntial='" + middleIntial + '\'' +
+                ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
