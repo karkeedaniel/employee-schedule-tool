@@ -6,6 +6,7 @@
         <title>Employee Schedule Tool</title>
         <spring:url value="/resources/js/est.js" var="estJS" />
         <spring:url value="/resources/js/auth.js" var="authJS" />
+        <spring:url value="/resources/js/dir.js" var="dirJS" />
         <spring:url value="/resources/js/mgr.js" var="mgrJS" />
 
         <link rel="stylesheet"
@@ -35,6 +36,7 @@
 
         <script src="${estJS}"></script>
         <script src="${authJS}"></script>
+        <script src="${dirJS}"></script>
         <script src="${mgrJS}"></script>
     </head>
     <body ng-controller="estCtrl">

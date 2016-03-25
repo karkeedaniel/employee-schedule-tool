@@ -31,6 +31,16 @@ public class LoginController {
         return new ModelAndView("register");
     }
 
+    @RequestMapping(value = "/emp", method = RequestMethod.GET)
+    public ModelAndView employeePage() {
+        return new ModelAndView("emp");
+    }
+
+    @RequestMapping(value = "/approval", method = RequestMethod.GET)
+    public ModelAndView approvalPage() {
+        return new ModelAndView("approval");
+    }
+
     @RequestMapping(value = "/user-url", method = RequestMethod.GET)
     public ModelMap userAndUrl() {
         ModelMap model = new ModelMap();
@@ -42,6 +52,11 @@ public class LoginController {
     @RequestMapping(value = "/mgr", method = RequestMethod.GET)
     public ModelAndView managerPage() {
         return new ModelAndView("mgr");
+    }
+
+    @RequestMapping(value = "/dir", method = RequestMethod.GET)
+    public ModelAndView directorPage() {
+        return new ModelAndView("dir");
     }
 
     private String getPrincipal() {
@@ -66,11 +81,17 @@ public class LoginController {
         List<String> roles = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         if (isManager(roles)) {
             url = "/mgr";
+        } else if (isDirector(roles)) {
+            url = "/dir";
         }
         return url;
     }
 
     private boolean isManager(List<String> roles) {
         return roles.contains("MANAGER");
+    }
+
+    private boolean isDirector(List<String> roles) {
+        return roles.contains("DIRECTOR");
     }
 }

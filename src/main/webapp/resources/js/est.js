@@ -7,8 +7,20 @@ angular.module("estApp")
             templateUrl: "login"
         });
 
+        $routeProvider.when("/dir", {
+            templateUrl: "dir"
+        });
+
         $routeProvider.when("/mgr", {
             templateUrl: "mgr"
+        });
+
+        $routeProvider.when("/emp", {
+            templateUrl: "emp"
+        });
+
+        $routeProvider.when("/approval", {
+            templateUrl: "approval"
         });
 
         $routeProvider.when("/reset", {
