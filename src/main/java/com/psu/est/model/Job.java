@@ -27,8 +27,6 @@ public class Job implements DomainObject {
     private String jobState;
     private String siteContactName;
     private String siteContactPhone;
-    //private java.time.LocalDateTime jobBookDate;
-    //private java.time.LocalDateTime jobDate;
 
     @Id
     @GeneratedValue

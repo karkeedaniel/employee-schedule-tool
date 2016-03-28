@@ -10,9 +10,10 @@ import java.sql.Timestamp;
  */
 @Entity
 public class Employee implements DomainObject {
-    private int employeeId;
+
+    private Integer employeeId;
     private String firstName;
-    private char middleInitial;
+    private String middleInitial;
     private String lastName;
     private String email;
     private String gender;
@@ -22,20 +23,22 @@ public class Employee implements DomainObject {
     private Timestamp dateCreated;
     private String modifiedBy;
     private Timestamp dateModified;
+    private Integer currentLocationId;
+    private Integer baseLocationId;
 
     @Id
     @GeneratedValue
-    @Column(name = "employee_id")
-    public int getEmployeeId() {
+    @Column(name = "employee_id", nullable = false)
+    public Integer getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
     }
 
     @Basic
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false, length = 45)
     public String getFirstName() {
         return firstName;
     }
@@ -45,17 +48,17 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "middle_initial")
-    public char getMiddleInitial() {
+    @Column(name = "middle_initial", nullable = true, length = 1)
+    public String getMiddleInitial() {
         return middleInitial;
     }
 
-    public void setMiddleInitial(char middleInitial) {
+    public void setMiddleInitial(String middleInitial) {
         this.middleInitial = middleInitial;
     }
 
     @Basic
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false, length = 45)
     public String getLastName() {
         return lastName;
     }
@@ -65,7 +68,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = true, length = 45)
     public String getEmail() {
         return email;
     }
@@ -75,7 +78,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = true, length = 10)
     public String getGender() {
         return gender;
     }
@@ -85,7 +88,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "contact")
+    @Column(name = "contact", nullable = false, length = 20)
     public String getContact() {
         return contact;
     }
@@ -95,7 +98,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "dob")
+    @Column(name = "dob", nullable = true)
     public Timestamp getDob() {
         return dob;
     }
@@ -105,7 +108,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "created_by")
+    @Column(name = "created_by", nullable = true, length = 45)
     public String getCreatedBy() {
         return createdBy;
     }
@@ -115,7 +118,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "date_created")
+    @Column(name = "date_created", nullable = true)
     public Timestamp getDateCreated() {
         return dateCreated;
     }
@@ -125,7 +128,7 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "modified_by")
+    @Column(name = "modified_by", nullable = true, length = 45)
     public String getModifiedBy() {
         return modifiedBy;
     }
@@ -135,13 +138,33 @@ public class Employee implements DomainObject {
     }
 
     @Basic
-    @Column(name = "date_modified")
+    @Column(name = "date_modified", nullable = true)
     public Timestamp getDateModified() {
         return dateModified;
     }
 
     public void setDateModified(Timestamp dateModified) {
         this.dateModified = dateModified;
+    }
+
+    @Basic
+    @Column(name = "current_location_id", nullable = true)
+    public Integer getCurrentLocationId() {
+        return currentLocationId;
+    }
+
+    public void setCurrentLocationId(Integer currentLocationId) {
+        this.currentLocationId = currentLocationId;
+    }
+
+    @Basic
+    @Column(name = "base_location_id", nullable = true)
+    public Integer getBaseLocationId() {
+        return baseLocationId;
+    }
+
+    public void setBaseLocationId(Integer baseLocationId) {
+        this.baseLocationId = baseLocationId;
     }
 
     @Override
@@ -151,27 +174,34 @@ public class Employee implements DomainObject {
 
         Employee employee = (Employee) o;
 
-        if (employeeId != employee.employeeId) return false;
-        if (middleInitial != employee.middleInitial) return false;
-        if (contact != null ? !contact.equals(employee.contact) : employee.contact != null) return false;
+        if (employeeId != null ? !employeeId.equals(employee.employeeId) : employee.employeeId != null) return false;
         if (firstName != null ? !firstName.equals(employee.firstName) : employee.firstName != null) return false;
+        if (middleInitial != null ? !middleInitial.equals(employee.middleInitial) : employee.middleInitial != null)
+            return false;
         if (lastName != null ? !lastName.equals(employee.lastName) : employee.lastName != null) return false;
         if (email != null ? !email.equals(employee.email) : employee.email != null) return false;
         if (gender != null ? !gender.equals(employee.gender) : employee.gender != null) return false;
+        if (contact != null ? !contact.equals(employee.contact) : employee.contact != null) return false;
         if (dob != null ? !dob.equals(employee.dob) : employee.dob != null) return false;
         if (createdBy != null ? !createdBy.equals(employee.createdBy) : employee.createdBy != null) return false;
         if (dateCreated != null ? !dateCreated.equals(employee.dateCreated) : employee.dateCreated != null)
             return false;
         if (modifiedBy != null ? !modifiedBy.equals(employee.modifiedBy) : employee.modifiedBy != null) return false;
-        return dateModified != null ? dateModified.equals(employee.dateModified) : employee.dateModified == null;
+        if (dateModified != null ? !dateModified.equals(employee.dateModified) : employee.dateModified != null)
+            return false;
+        if (currentLocationId != null ? !currentLocationId.equals(employee.currentLocationId) : employee.currentLocationId != null)
+            return false;
+        if (baseLocationId != null ? !baseLocationId.equals(employee.baseLocationId) : employee.baseLocationId != null)
+            return false;
 
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = employeeId;
+        int result = employeeId != null ? employeeId.hashCode() : 0;
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (int) middleInitial;
+        result = 31 * result + (middleInitial != null ? middleInitial.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
@@ -181,24 +211,8 @@ public class Employee implements DomainObject {
         result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
         result = 31 * result + (modifiedBy != null ? modifiedBy.hashCode() : 0);
         result = 31 * result + (dateModified != null ? dateModified.hashCode() : 0);
+        result = 31 * result + (currentLocationId != null ? currentLocationId.hashCode() : 0);
+        result = 31 * result + (baseLocationId != null ? baseLocationId.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "employeeId=" + employeeId +
-                ", firstName='" + firstName + '\'' +
-                ", middleInitial=" + middleInitial +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
-                ", contact='" + contact + '\'' +
-                ", dob=" + dob +
-                ", createdBy='" + createdBy + '\'' +
-                ", dateCreated=" + dateCreated +
-                ", modifiedBy='" + modifiedBy + '\'' +
-                ", dateModified=" + dateModified +
-                '}';
     }
 }

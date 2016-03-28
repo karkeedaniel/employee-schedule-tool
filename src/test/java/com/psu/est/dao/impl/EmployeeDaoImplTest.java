@@ -49,7 +49,7 @@ public class EmployeeDaoImplTest extends CommonTest {
             employee.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             employee.setDob(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             employeeDao.persist(employee);
-            assertNotEquals(0, employee.getEmployeeId());
+            assertNotEquals(0L, (long)employee.getEmployeeId());
         } catch (Exception e) {
             fail("Exception: " + e);
         }
