@@ -39,7 +39,8 @@ public class ScheduleService {
     private ZoneOffset thisZoneOffset = thisOffsetTime.getOffset();
 
     // maximum travelDistance
-    private static final double maxTravelDistance = 50.0;
+    private static final double maxTravelDistanceDefault = 35.0;
+    private static final double maxTravelDistanceMax = 100.0;
 
     // tbd
     @Autowired
@@ -57,8 +58,8 @@ public class ScheduleService {
 
     // convert between java.time.ZonedDateTime and java.time.LocalDate time
 
-    // ZonedDateTime to LocalDateTime is trivial since ZoneDateTime has a LocalDateTime
-    // (+ timezone info)
+    // ZonedDateTime to LocalDateTime is trivial since ZoneDateTime
+    // has a LocalDateTime (+ timezone info)
     public java.time.LocalDateTime GetLocalDateTime(ZonedDateTime zonedDateTime) { return zonedDateTime.toLocalDateTime(); }
     public java.time.LocalDate GetLocalDate(ZonedDateTime zonedDateTime) { return zonedDateTime.toLocalDate(); }
     public java.time.LocalTime GetLocalTime(ZonedDateTime zonedDateTime) { return zonedDateTime.toLocalTime(); }
@@ -295,7 +296,7 @@ public class ScheduleService {
         if (NonJobType.equalsIgnoreCase("DRIVEHOME"))
         {
             nonJob.setTravelTime(NonJobDurationMins);
-            nonJob.setDuration(0);
+            nonJob.setDuration(NonJobDurationMins);
         }
         else
         {
@@ -374,7 +375,16 @@ public class ScheduleService {
 
     public List<Job> ScheduleUnAssignedJobs(ZonedDateTime startTime, ZonedDateTime endTime)
     {
-        return ScheduleUnAssignedJobs(startTime, endTime, maxTravelDistance);
+        Double currentMaxTravelDistance = maxTravelDistanceDefault;
+        List<Job> unScheduledJobList;
+
+        while (currentMaxTravelDistance <= maxTravelDistanceMax)
+        {
+            unScheduledJobList = ScheduleUnAssignedJobs(startTime, endTime, currentMaxTravelDistance);
+            if (unScheduledJobList.isEmpty()) break;
+            currentMaxTravelDistance += maxTravelDistanceDefault;
+        }
+        return ScheduleUnAssignedJobs(startTime, endTime, currentMaxTravelDistance);
     }
 
     public List<Job> ScheduleUnAssignedJobs(ZonedDateTime startTime, ZonedDateTime endTime, double max_distance)
@@ -399,6 +409,13 @@ public class ScheduleService {
         }
         // return list of jobs that could not be scheduled
         return unScheduledJobList;
+    }
+
+    public List<Schedule> GetScheduleByDateAndEmployeeID(LocalDate date, int employee_id)
+    {
+        ZonedDateTime startTime = GetZoneDateTime(date);
+        ZonedDateTime endTime = startTime.plusHours(24);
+        return scheduleDao.GetScheduleByIntervalAndEmployeeID(startTime, endTime,employee_id);
     }
 
     public boolean SchedulePTO(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id)
