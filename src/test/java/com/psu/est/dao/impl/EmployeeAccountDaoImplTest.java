@@ -5,6 +5,7 @@ import com.psu.est.dao.interfaces.EmployeeAccountDao;
 import com.psu.est.dao.interfaces.EmployeeDao;
 import com.psu.est.model.Employee;
 import com.psu.est.model.EmployeeAccount;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 

@@ -4,40 +4,45 @@
     <head>
         <meta charset="UTF-8">
         <title>Employee Schedule Tool</title>
-        <spring:url value="/resources/js/est.js" var="estJS" />
-        <spring:url value="/resources/js/auth.js" var="authJS" />
-        <spring:url value="/resources/js/dir.js" var="dirJS" />
-        <spring:url value="/resources/js/mgr.js" var="mgrJS" />
+        <spring:url value="/resources/bootstrap/css/bootstrap.min.css" var="bootstrapCSS"/>
+        <spring:url value="/resources/bootstrap/css/bootstrap-theme.min.css" var="bootstrapThemeCSS"/>
+        <spring:url value="/resources/font-awesome/css/font-awesome.min.css" var="fontAwesomeCSS"/>
+        <spring:url value="/resources/font-awesome/css/font-awesome.min.css" var="fontAwesomeCSS"/>
 
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-              crossorigin="anonymous">
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-              integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
-              crossorigin="anonymous">
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet"
-              href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="${bootstrapCSS}">
+        <link rel="stylesheet" href="${bootstrapThemeCSS}">
+        <link rel="stylesheet" href="${fontAwesomeCSS}">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
+        <spring:url value="/resources/jquery/js/jquery.min.js" var="jqueryJS" />
+        <spring:url value="/resources/angular/js/angular.min.js" var="angularJS" />
+        <spring:url value="/resources/angular/js/angular-animate.min.js" var="angularAnimateJS" />
+        <spring:url value="/resources/angular-datatables/js/angular-datatables.min.js" var="angularDatatablesJS" />
+        <spring:url value="/resources/est/js/est.js" var="estJS" />
+        <spring:url value="/resources/est/js/auth.js" var="authJS" />
+        <spring:url value="/resources/est/js/main.js" var="mainJS" />
+        <spring:url value="/resources/est/js/employee.js" var="employeeJS" />
+        <spring:url value="/resources/est/js/register.js" var="registerJS" />
+
+        <script src="${jqueryJS}"></script>
+        <script src="${angularJS}"></script>
+        <script src="${angularAnimateJS}"></script>
         <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-        <script src="http://dt.ishraf.com/bower_components/angular-datatables/dist/angular-datatables.js"></script>
+        <script src="${angularDatatablesJS}"></script>
+        <%--<script src="http://dt.ishraf.com/bower_components/angular-datatables/dist/angular-datatables.js"></script>--%>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.2.5/ui-bootstrap-tpls.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
 
         <script>
-            angular.module("estApp", ["ngRoute", "datatables", "ui.bootstrap", "ngAnimate"]);
+            angular.module("estApp", ["ui.router", "datatables", "ui.bootstrap", "ngAnimate"]);
         </script>
 
         <script src="${estJS}"></script>
         <script src="${authJS}"></script>
-        <script src="${dirJS}"></script>
-        <script src="${mgrJS}"></script>
+        <script src="${mainJS}"></script>
+        <script src="${employeeJS}"></script>
+        <script src="${registerJS}"></script>
+
     </head>
     <body ng-controller="estCtrl">
     <nav class="navbar navbar-default navbar-static-top">
@@ -49,7 +54,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">EMPLOYEE SCHEDULE TOOL</a>
+                <a class="navbar-brand" href="">EMPLOYEE SCHEDULE TOOL</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -61,7 +66,7 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid" ng-view></div>
+    <div class="container-fluid" ui-view></div>
     </body>
 </html>
 

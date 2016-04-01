@@ -21,7 +21,7 @@ public class EmployeeAccountDaoImpl extends GenericDaoImpl<EmployeeAccount> impl
     }
 
     @Override
-    public EmployeeAccount getByUsernameAndStatus(String username, String status) throws DataAccessException {
+    public EmployeeAccount getByUsernameAndStatus(String username, String status) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EmployeeAccount.class, "employeeAccount");
         criteria.createAlias("employeeAccount.employee", "employee")
                 .add(Restrictions.eq("username", username))
@@ -30,7 +30,7 @@ public class EmployeeAccountDaoImpl extends GenericDaoImpl<EmployeeAccount> impl
     }
 
     @Override
-    public EmployeeAccount getByUsername(String username) throws DataAccessException {
+    public EmployeeAccount getByUsername(String username) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EmployeeAccount.class, "employeeAccount");
         criteria.createAlias("employeeAccount.employee", "employee")
                 .add(Restrictions.eq("username", username));

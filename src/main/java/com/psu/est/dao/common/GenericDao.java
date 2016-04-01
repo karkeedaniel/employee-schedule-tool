@@ -1,7 +1,6 @@
 package com.psu.est.dao.common;
 
 import com.psu.est.model.interfaces.DomainObject;
-import org.springframework.dao.DataAccessException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,43 +13,37 @@ public interface GenericDao<T extends DomainObject> {
     /**
      *
      * @param object
-     * @throws DataAccessException
      */
-    public void persist(T object) throws DataAccessException;
+    public void persist(T object);
 
     /**
      *
      * @param object
-     * @throws DataAccessException
      */
-    public void update(T object) throws DataAccessException;
+    public void update(T object);
 
     /**
      *
-     * @param object
-     * @throws DataAccessException
+     * @param object\
      */
-    public T saveOrUpdate(T object) throws DataAccessException;
+    public T saveOrUpdate(T object);
 
     /**
      *
-     * @param object
-     * @throws DataAccessException
+     * @param object\
      */
-    public void delete(T object) throws DataAccessException;
+    public void delete(T object);
 
     /**
      *
      * @param id
      * @return
-     * @throws DataAccessException
      */
-    public T get(Serializable id) throws DataAccessException;
+    public T get(Serializable id);
 
     /**
      *
-     * @return
-     * @throws DataAccessException
+     * @return\
      */
-    public List<T> getAll() throws DataAccessException;
+    public List<T> getAll();
 }

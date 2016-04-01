@@ -9,11 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -68,9 +67,10 @@ public class EmployeeDaoImplTest extends CommonTest {
             Employee employee = employeeDao.get(1);
             assertNotNull(employee);
             logger.info(employee.toString());
-            employee.setEmail("djk0116@est.com");
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            employee.setSsn(encoder.encode("123456789"));
             employeeDao.update(employee);
-            assertEquals("djk0116@est.com", employee.getEmail());
+            assertNotNull(employee);
             logger.info(employee.toString());
         } catch (Exception e) {
             fail("Excetion: " + e);
@@ -96,9 +96,30 @@ public class EmployeeDaoImplTest extends CommonTest {
     }
 
     @Test
+    public void testGetByEmployeeNum() throws Exception {
+        Employee employee = employeeDao.getByEmployeeNum("A7304BD");
+        assertNotNull(employee);
+        logger.info(employee);
+    }
+
+    @Test
     public void testGetAll() {
         try {
             List<Employee> employeeList = employeeDao.getAll();
+            assertNotNull(employeeList);
+            logger.info("Size: " + employeeList.size());
+            for (Employee employee: employeeList) {
+                logger.info(employee.toString());
+            }
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
+    @Test
+    public void testGetByNotLikeRole() throws Exception {
+        try {
+            List<Employee> employeeList = employeeDao.getByNotLikeRole(Collections.singletonList("DIRECTOR"));
             assertNotNull(employeeList);
             logger.info("Size: " + employeeList.size());
             for (Employee employee: employeeList) {

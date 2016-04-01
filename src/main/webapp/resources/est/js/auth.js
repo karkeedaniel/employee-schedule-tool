@@ -2,8 +2,7 @@
  * Created by danielkarkee on 3/2/16.
  */
 angular.module("estApp")
-    .controller("authCtrl", function($rootScope, $scope, $http, $location) {
-        var url;
+    .controller("authCtrl", function($rootScope, $scope, $http, $state) {
 
         var authenticate = function(credentials, callback) {
 
@@ -11,10 +10,10 @@ angular.module("estApp")
 
             $http({
                 method: "get",
-                url: "user-url"
+                url: "user"
             }).then(function successCallback(response) {
                 $rootScope.user = response.data.user;
-                url = response.data.url;
+                $rootScope.role = response.data.role;
                 $rootScope.authenticated = true;
                 callback && callback();
             }, function errorCallback() {
@@ -26,7 +25,7 @@ angular.module("estApp")
         $scope.login = function(credentials) {
             authenticate(credentials, function() {
                 if ($rootScope.authenticated) {
-                    $location.path(url);
+                    $state.go("main");
                 }
                 $scope.error = !$rootScope.authenticated;
             });

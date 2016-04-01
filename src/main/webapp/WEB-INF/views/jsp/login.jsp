@@ -42,12 +42,12 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="text-center">
-                                            <a href="/register" class="btn btn-success btn-block">Register</a>
+                                            <a ui-sref="register" class="btn btn-success btn-block">Register</a>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="text-center">
-                                            <a href="/reset" class="btn btn-warning btn-block">Reset Password</a>
+                                            <a ui-sref="reset" class="btn btn-warning btn-block">Reset Password</a>
                                         </div>
                                     </div>
                                 </div>

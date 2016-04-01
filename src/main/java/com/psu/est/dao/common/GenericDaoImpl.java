@@ -2,8 +2,8 @@ package com.psu.est.dao.common;
 
 import com.psu.est.model.interfaces.DomainObject;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -25,34 +25,33 @@ public class GenericDaoImpl<T extends DomainObject> implements GenericDao<T> {
     }
 
     @Override
-    public void persist(T object) throws DataAccessException {
+    public void persist(T object) {
         sessionFactory.getCurrentSession().persist(object);
-
     }
 
     @Override
-    public void update(T object) throws DataAccessException {
+    public void update(T object) {
         sessionFactory.getCurrentSession().update(object);
     }
 
     @Override
-    public T saveOrUpdate(T object) throws DataAccessException {
+    public T saveOrUpdate(T object) {
         sessionFactory.getCurrentSession().saveOrUpdate(object);
         return object;
     }
 
     @Override
-    public void delete(T object) throws DataAccessException {
+    public void delete(T object) {
         sessionFactory.getCurrentSession().delete(object);
     }
 
     @Override
-    public T get(Serializable id) throws DataAccessException {
+    public T get(Serializable id) {
         return (T) sessionFactory.getCurrentSession().get(type, id);
     }
 
     @Override
-    public List<T> getAll() throws DataAccessException {
+    public List<T> getAll() {
         return sessionFactory.getCurrentSession().createCriteria(type).list();
     }
 }
