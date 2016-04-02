@@ -24,4 +24,5 @@ public interface EmployeeDao extends GenericDao<Employee> {
      */
     List<Employee> getByNotLikeRole(List<String> roleList);
 
+    List<Employee> getListByRole(String role);
 }

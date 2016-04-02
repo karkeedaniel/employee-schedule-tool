@@ -35,4 +35,16 @@ public class EmployeeDaoImpl extends GenericDaoImpl<Employee> implements Employe
         return criteria.list();
     }
 
+    @Override
+    public List<Employee> getListByRole(String role){
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Employee.class);
+        if (role != null){
+            // using like until we move to enums for role
+            String rolelike = '%' + role + '%';
+            criteria.add(Restrictions.ilike("role",rolelike));
+            return criteria.list();
+        }
+        else return null;
+    }
+
 }

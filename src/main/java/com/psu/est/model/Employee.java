@@ -25,6 +25,7 @@ public class Employee implements DomainObject {
     private EmployeeAccount employeeAccount;
     private String role;
     private String status;
+    private Integer baseLocationId;
 
     @Id
     @GeneratedValue
@@ -155,6 +156,16 @@ public class Employee implements DomainObject {
 
     public void setEmployeeAccount(EmployeeAccount employeeAccount) {
         this.employeeAccount = employeeAccount;
+    }
+
+    @Basic
+    @Column(name = "base_location_id", nullable = true)
+    public Integer getBaseLocationId() {
+        return baseLocationId;
+    }
+
+    public void setBaseLocationId(Integer baseLocationId) {
+        this.baseLocationId = baseLocationId;
     }
 
     @Override
