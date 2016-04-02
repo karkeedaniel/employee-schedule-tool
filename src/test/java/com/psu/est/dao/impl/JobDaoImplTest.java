@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.*;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.junit.Assert.*;
 
@@ -28,8 +30,16 @@ public class JobDaoImplTest extends CommonTest {
 
     private static final Logger logger = LogManager.getLogger(EmployeeDaoImplTest.class);
     private int location_id1, location_id2;
-    private Date date = new Date(Calendar.getInstance().getTimeInMillis());  // initializes to current
-
+    private java.sql.Date dateTest = new Date(Calendar.getInstance().getTimeInMillis());  // initializes to current
+    private java.util.Date dateTest1 = new Date(Calendar.getInstance().getTimeInMillis());
+    private Timestamp date = new Timestamp(Calendar.getInstance().getTimeInMillis());
+    private Timestamp timestamp = new Timestamp(LocalDateTime.now().toInstant(ZoneOffset.of("-0400")).toEpochMilli());
+    private Timestamp timestamp1 = new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli());
+    private Timestamp timestamp2 = new Timestamp(ZonedDateTime.of(2016,4,15,13,30,0,0,ZoneId.systemDefault()).toInstant().toEpochMilli());
+    private ZoneId thisZoneId = ZoneId.systemDefault();  // or ZoneId.of("America/NewYork");
+    private OffsetTime  thisOffsetTime = OffsetTime.now(thisZoneId);
+    private ZoneOffset thisZoneOffset = thisOffsetTime.getOffset();
+    private Timestamp timestamp3 = new Timestamp(LocalDateTime.of(2016,4,15,13,30).toInstant(thisZoneOffset).toEpochMilli());
 
     @Autowired
     private JobDao jobDao;
@@ -74,7 +84,7 @@ public class JobDaoImplTest extends CommonTest {
         try {
             Job job = new Job();
             job.setJobLocation(location_id1);
-            job.setJobBookDate(date);
+            job.setJobBookDate(timestamp3);
             job.setJobDuration(60);
             job.setJobName("McDonalds");
             job.setJobPhone("610-555-1212");
@@ -82,13 +92,17 @@ public class JobDaoImplTest extends CommonTest {
             job.setSiteContactName("John Smith");
             job.setSiteContactPhone("610-555-1234");
             Calendar calendar = Calendar.getInstance();
-            calendar.set(2016,4,15);
-            job.setJobDate(new Date(calendar.getTimeInMillis()));
+            calendar.set(2016,4,15, 16, 15);
+            job.setJobDate(new Timestamp(calendar.getTimeInMillis()));
             //java.util.Date utilDate = new java.util.Date();
             //utilDate.setTime(calendar.getTimeInMillis());
             //job.setJobDate(new java.sql.Date(utilDate.getTime()));
             job.setJobLevel(1);
             jobDao.persist(job);
+            Job otherJob = jobDao.get(job.getJobId());
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(otherJob.getJobBookDate().getTime()),thisZoneOffset);
+            ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(otherJob.getJobBookDate().getTime()),thisZoneOffset);
+            ZonedDateTime zonedDateTime1 = ZonedDateTime.ofInstant(Instant.ofEpochSecond(otherJob.getJobBookDate().getTime()/1000),thisZoneOffset);
             assertNotEquals(0,(long)job.getJobId());
         } catch (Exception e) {
             fail("Exception: " + e);
@@ -110,10 +124,10 @@ public class JobDaoImplTest extends CommonTest {
             job.setJobLevel(1);
             Calendar calendar = Calendar.getInstance();
             calendar.set(2016,4,15);
-            job.setJobDate(new Date(calendar.getTimeInMillis()));
+            job.setJobDate(new Timestamp(calendar.getTimeInMillis()));
             jobDao.persist(job);
             calendar.set(2016,4,1);
-            Date newDate = new Date(calendar.getTimeInMillis());
+            Timestamp newDate = new Timestamp(calendar.getTimeInMillis());
             job.setJobDate(newDate);
             jobDao.update(job);
             job = jobDao.get(job.getJobId());
@@ -138,10 +152,10 @@ public class JobDaoImplTest extends CommonTest {
             job.setJobLevel(1);
             Calendar calendar = Calendar.getInstance();
             calendar.set(2016,4,15);
-            job.setJobDate(new Date(calendar.getTimeInMillis()));
+            job.setJobDate(new Timestamp(calendar.getTimeInMillis()));
             jobDao.saveOrUpdate(job);
             calendar.set(2016,4,1);
-            Date newDate = new Date(calendar.getTimeInMillis());
+            Timestamp newDate = new Timestamp(calendar.getTimeInMillis());
             job.setJobDate(newDate);
             jobDao.saveOrUpdate(job);
             job = jobDao.get(job.getJobId());
@@ -166,7 +180,7 @@ public class JobDaoImplTest extends CommonTest {
             job.setJobLevel(1);
             Calendar calendar = Calendar.getInstance();
             calendar.set(2016,4,15);
-            job.setJobDate(new Date(calendar.getTimeInMillis()));
+            job.setJobDate(new Timestamp(calendar.getTimeInMillis()));
             jobDao.saveOrUpdate(job);
             job = jobDao.get(job.getJobId());
             int localJobId = job.getJobId();
@@ -193,7 +207,7 @@ public class JobDaoImplTest extends CommonTest {
             job.setJobLevel(1);
             Calendar calendar = Calendar.getInstance();
             calendar.set(2016,4,15);
-            job.setJobDate(new Date(calendar.getTimeInMillis()));
+            job.setJobDate(new Timestamp(calendar.getTimeInMillis()));
             jobDao.persist(job);
             int OtherJobId = job.getJobId();
             Job otherJob = jobDao.get(OtherJobId);
@@ -220,7 +234,7 @@ public class JobDaoImplTest extends CommonTest {
             job.setJobLevel(1);
             Calendar calendar = Calendar.getInstance();
             calendar.set(2016,4,15);
-            job.setJobDate(new Date(calendar.getTimeInMillis()));
+            job.setJobDate(new Timestamp(calendar.getTimeInMillis()));
             jobDao.persist(job);
             List<Job> jobList1 = jobDao.getAll();
             assertTrue(jobList.size()+1 == jobList1.size());

@@ -1,8 +1,6 @@
 package com.psu.est.model;
 
 import com.psu.est.model.interfaces.DomainObject;
-import com.psu.est.service.LocationService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,24 +11,28 @@ public class Location implements DomainObject, Serializable {
 
 
     private Integer locationId;
-    private Double latitude;// = Double.NaN;
-    private Double longitude;// = Double.NaN;
+    private Double latitude; // = Double.NaN;
+    private Double longitude; //= Double.NaN;
     private String streetNumber;// = null;
     private String street;// = null;
     private String city;// = null;
     private String state;// = null;
     private String zip;// = null;
-    private String formattedAddress;// = null;
+    private String formattedAddress = null; //unresolved indicator
+/*
+    @Autowired
+    private LocationService locationService;
 
-    //@Autowired
-    //private LocationService locationService;
-     /*
     public Location()
     {
         super();
+        // unresolved flags
+        formattedAddress =  null;
+        latitude=longitude=Double.NaN;
     }
+*/
 
-
+/*
     public Location(String formattedAddress)
     {
         super();

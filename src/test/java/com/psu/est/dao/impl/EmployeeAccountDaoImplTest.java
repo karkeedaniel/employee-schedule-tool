@@ -63,6 +63,7 @@ public class EmployeeAccountDaoImplTest extends CommonTest {
         }
     }
 
+
     @Test
     public void testUpdate() throws Exception {
         EmployeeAccount employeeAccount = employeeAccountDao.get(1);

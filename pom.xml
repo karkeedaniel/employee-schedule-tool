@@ -38,79 +38,96 @@
         <org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
         <org.hibernate.version>4.3.6.Final</org.hibernate.version>
         <mysql.version>5.1.31</mysql.version>
+        <!-- srg hibernate5 testing for time types
+          <java.version>1.8</java.version>
+          <org.hibernate.version>5.0.0.Final</org.hibernate.version>
+          <mysql.version>5.1.36</mysql.version>
+        -->
         <servlet.version>3.1.0</servlet.version>
         <jstl.version>1.2</jstl.version>
         <log4j.version>2.5</log4j.version>
         <junit.version>4.11</junit.version>
-    </properties>
+      </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${org.springframework.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-bom</artifactId>
-                <version>${org.springframework.security.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+      <dependencyManagement>
+          <dependencies>
+              <dependency>
+                  <groupId>org.springframework</groupId>
+                  <artifactId>spring-framework-bom</artifactId>
+                  <version>${org.springframework.version}</version>
+                  <type>pom</type>
+                  <scope>import</scope>
+              </dependency>
+              <dependency>
+                  <groupId>org.springframework.security</groupId>
+                  <artifactId>spring-security-bom</artifactId>
+                  <version>${org.springframework.security.version}</version>
+                  <type>pom</type>
+                  <scope>import</scope>
+              </dependency>
+          </dependencies>
+      </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${org.hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${org.hibernate.version}</version>
-        </dependency>
+      <dependencies>
+          <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-core</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-context</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-orm</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-web</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-webmvc</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework.security</groupId>
+              <artifactId>spring-security-core</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework.security</groupId>
+              <artifactId>spring-security-web</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework.security</groupId>
+              <artifactId>spring-security-config</artifactId>
+          </dependency>
+          <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-test</artifactId>
+              <scope>test</scope>
+          </dependency>
+          <dependency>
+              <groupId>org.hibernate</groupId>
+              <artifactId>hibernate-core</artifactId>
+              <version>${org.hibernate.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.hibernate</groupId>
+              <artifactId>hibernate-entitymanager</artifactId>
+              <version>${org.hibernate.version}</version>
+          </dependency>
+          <!-- srg - hibernate 5 testing
+          <dependency>
+              <groupId>org.hibernate</groupId>
+              <artifactId>hibernate-java8</artifactId>
+              <version>${org.hibernate.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.hibernate</groupId>
+              <artifactId>hibernate-c3p0</artifactId>
+              <version>${org.hibernate.version}</version>
+          </dependency>
+          -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -156,6 +173,9 @@
             <groupId>com.google.maps</groupId>
             <artifactId>google-maps-services</artifactId>
             <version>0.1.10</version>
+            <!--
+            <version>${googlemaps.version}</version>
+            -->
         </dependency>
         <dependency>
             <groupId>junit</groupId>
