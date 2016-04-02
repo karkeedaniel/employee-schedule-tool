@@ -42,6 +42,9 @@ public class ScheduleService {
     private static final double maxTravelDistanceDefault = 35.0;
     private static final double maxTravelDistanceMax = 100.0;
 
+    // maximum days from a job preferred date that is can be schedules
+    private static final int maxDaysFromPreferredDate = 7; //up to one week later
+
     // tbd
     @Autowired
     private SessionFactory sessionFactory; // this exits in parent
@@ -154,7 +157,15 @@ public class ScheduleService {
             return false;
     }
 
+    public ZonedDateTime GetNextValidWorkDay(ZonedDateTime time)
+    {
 
+        if (IsTimeDuringWorkWeek(time)) return time;
+        // add 24 hours unil find next valis work day
+        ZonedDateTime nextWorkDay = time;
+        while (!IsTimeDuringWorkWeek(nextWorkDay)) nextWorkDay = nextWorkDay.plusDays(1);
+        return nextWorkDay;
+    }
 
     Duration GetEmployeeTimeScheduledForInterval(Employee employee, ZonedDateTime startTime, ZonedDateTime endTime)
     {
@@ -343,14 +354,10 @@ public class ScheduleService {
             if (employee.getBaseLocationId()== null)
             {
                 // tbd log error
-                // candidateList.remove(employee);
+
             }
             double empDistance = locationService.distance(empLocation,jobLocation);
-            if (empDistance > max_distance)
-            {
-                //candidateList.remove(employee);
-            }
-            else
+            if (empDistance <= max_distance)
             {
                 distanceQueue.add(new Employee_Distance(employee,empDistance));
             }
@@ -373,39 +380,54 @@ public class ScheduleService {
         return false;
     }
 
+    // simple call using default parameters for max employ distance and job scheduling time
     public List<Job> ScheduleUnAssignedJobs(ZonedDateTime startTime, ZonedDateTime endTime)
     {
         Double currentMaxTravelDistance = maxTravelDistanceDefault;
-        List<Job> unScheduledJobList;
+        List<Job> unScheduledJobList = null;
+        // day offset is days from preferred job date
 
+        // first try scheduling on preferred date with any employee up to maximum
+        // travel distance fo one day
         while (currentMaxTravelDistance <= maxTravelDistanceMax)
         {
-            unScheduledJobList = ScheduleUnAssignedJobs(startTime, endTime, currentMaxTravelDistance);
+            unScheduledJobList = ScheduleUnAssignedJobs(startTime, endTime, currentMaxTravelDistance, maxDaysFromPreferredDate);
             if (unScheduledJobList.isEmpty()) break;
             currentMaxTravelDistance += maxTravelDistanceDefault;
         }
-        return ScheduleUnAssignedJobs(startTime, endTime, currentMaxTravelDistance);
+        return unScheduledJobList;
     }
 
-    public List<Job> ScheduleUnAssignedJobs(ZonedDateTime startTime, ZonedDateTime endTime, double max_distance)
+    public List<Job> ScheduleUnAssignedJobs(ZonedDateTime startTime, ZonedDateTime endTime, double max_distance, int max_days_window)
     {
         // need to truncate all job starttimes to midnight since they may have been scheduled before
         List<Job> jobList = jobDao.GetJobsByIntervalAndState(startTime, endTime, "UNASSIGNED");
         List<Job> unScheduledJobList = new ArrayList<Job>();
         for (Job job : jobList)
         {
-            // in and out of database is via Timestamp
-            // truncate to midnight on same date
-            job.setJobDate(TruncateToDate(job.getJobDate()));
-            jobDao.update(job);
-            if (job.getJobLocation() <= 0)
-            {
+            boolean thisJobScheduled = false; //schedule success indicator
+            if (job.getJobLocation() <= 0) {
                 // location has not been created yet
                 // tbd log an error
                 continue;
             }
-          if (!ScheduleJob(job, max_distance))
-              unScheduledJobList.add(job);
+            // in and out of database is via Timestamp
+            // truncate to midnight on same date
+            job.setJobDate(TruncateToDate(job.getJobDate()));
+            // try to scedule from the preferred date to the preferred date + window
+            for(int i=0; i<= max_days_window; i++)
+            {
+                ZonedDateTime nextWorkDay = GetZonedDateTime(job.getJobDate());
+                nextWorkDay = GetNextValidWorkDay(nextWorkDay.plusDays(i));
+                job.setJobDate(GetTimestamp(nextWorkDay));
+                jobDao.update(job);
+                if (ScheduleJob(job, max_distance))
+                {
+                    thisJobScheduled = true;
+                    break;
+                }
+            }
+            if (!thisJobScheduled) unScheduledJobList.add(job);
         }
         // return list of jobs that could not be scheduled
         return unScheduledJobList;
