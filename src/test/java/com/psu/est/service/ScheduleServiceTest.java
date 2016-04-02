@@ -132,8 +132,6 @@ public class ScheduleServiceTest extends CommonTest {
         employeeAccount3.setUsername("jag");
         employeeAccount3.setPassword("password");
         employeeAccount3.setEmployee(employee3);
-        //employeeAccount3.setCreatedBy("srg");
-        //employeeAccount3.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         employeeAccountDao.persist(employeeAccount3);
         Location location4 = new Location();
         location4.setStreetNumber("2501");
@@ -152,8 +150,6 @@ public class ScheduleServiceTest extends CommonTest {
         employee4.setEmployeeNum("T4");
         employee4.setSsn("987654321");
         employee4.setStatus("ACTIVE");
-        //employee4.setCreatedBy("srg");
-        //employee4.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         employee4.setDob(new Date(Calendar.getInstance().getTimeInMillis()));
         employee4.setRole("TECHNICIAN");
         employeeDao.persist(employee4);
@@ -225,7 +221,7 @@ public class ScheduleServiceTest extends CommonTest {
         jobDao.persist(job3);
     }
 
-    private void SetUpJobsInFrisco(Timestamp jobDate) throws Exception {
+    private void SetUpJobs1InFrisco(Timestamp jobDate) throws Exception {
         Timestamp bookDate = new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli());
         Location location1 = new Location();
         location1.setStreetNumber("8970");
@@ -280,6 +276,65 @@ public class ScheduleServiceTest extends CommonTest {
         job3.setJobState("UNASSIGNED");
         job3.setSiteContactName("John Smith");
         job3.setSiteContactPhone("610-555-1234");
+        job3.setJobDate(jobDate);
+        jobDao.persist(job3);
+    }
+
+    private void SetUpJobs2InFrisco(Timestamp jobDate) throws Exception {
+        Timestamp bookDate = new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli());
+        Location location1 = new Location();
+        location1.setStreetNumber("9700");
+        location1.setStreet("Coit Rd");
+        location1.setCity("Plano");
+        location1.setState("TX");
+        locationService.resolveAddress(location1);
+        locationDao.persist(location1);
+        Job job1 = new Job();
+        job1.setJobLocation(location1.getLocationId());
+        job1.setJobBookDate(bookDate);
+        job1.setJobDuration(120);
+        job1.setJobName("StarBucks");
+        job1.setJobPhone("610-555-2212");
+        job1.setJobState("UNASSIGNED");
+        job1.setSiteContactName("John Doe");
+        job1.setSiteContactPhone("610-555-2224");
+        Calendar calendar = Calendar.getInstance();
+        job1.setJobDate(jobDate);
+        jobDao.persist(job1);
+        Location location2 = new Location();
+        location2.setStreetNumber("3949");
+        location2.setStreet("Legacy Dr #108");
+        location2.setCity("Plano");
+        location2.setState("TX");
+        locationService.resolveAddress(location2);
+        locationDao.persist(location2);
+        Job job2 = new Job();
+        job2.setJobLocation(location2.getLocationId());
+        job2.setJobBookDate(bookDate);
+        job2.setJobDuration(120);
+        job2.setJobName("StarBucks");
+        job2.setJobPhone("610-555-2212");
+        job2.setJobState("UNASSIGNED");
+        job2.setSiteContactName("John Doe");
+        job2.setSiteContactPhone("610-555-2234");
+        job2.setJobDate(jobDate);
+        jobDao.persist(job2);
+        Location location3 = new Location();
+        location3.setStreetNumber("1380");
+        location3.setStreet("W Campbell Rd");
+        location3.setCity("Richardson");
+        location3.setState("TX");
+        locationService.resolveAddress(location3);
+        locationDao.persist(location3);
+        Job job3 = new Job();
+        job3.setJobLocation(location3.getLocationId());
+        job3.setJobBookDate(bookDate);
+        job3.setJobDuration(120);
+        job3.setJobName("StarBucks");
+        job3.setJobPhone("610-555-2222");
+        job3.setJobState("UNASSIGNED");
+        job3.setSiteContactName("John Doe");
+        job3.setSiteContactPhone("610-555-2234");
         job3.setJobDate(jobDate);
         jobDao.persist(job3);
     }
@@ -342,7 +397,8 @@ public class ScheduleServiceTest extends CommonTest {
         job3.setJobDate(jobDate);
         jobDao.persist(job3);
     }
-
+    // to see clean schedule output in logger need to comment show sql line
+    // in com.psu.est.config.DataSourceConfig  hibernateProperties()
     @Test
     public void testScheduleUnAssignedJobs()
     {
@@ -350,7 +406,8 @@ public class ScheduleServiceTest extends CommonTest {
                 SetUp4Employees();
                 LocalDate jobDate = LocalDate.of(2016,4,15);
                 Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
-                SetUpJobsInFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+                SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+                SetUpJobs1InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
                 SetUpJobsInSanFran(jobTimestampFromLocalDate);
                 SetUpJobsInStateCollege(jobTimestampFromLocalDate);
                 jobDate = LocalDate.of(2016,4,15);
@@ -358,42 +415,17 @@ public class ScheduleServiceTest extends CommonTest {
                 ZonedDateTime endTime = startTime.plusHours(24);
                 List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
                 assertTrue(unassignedJobs.isEmpty());
-                testGetScheduleByDateAndEmployeeID();
+                testGetScheduleByDateAndEmployeeID(jobDate);
         } catch (Exception e) {
             fail("Exception: " + e);
         }
     }
 
-    @Test
-    public void testScheduleUnAssignedJobs1()
-    {
-        try
-        {
-            SetUp4Employees();
-            LocalDate jobDate = LocalDate.of(2016,4,15);
-            Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
-            SetUpJobsInFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
-            LocalDateTime jobDateTime = LocalDateTime.of(2016,4,15,0,0);
-            Timestamp jobTimestampFromLocalDateTime = scheduleService.GetTimestamp(jobDateTime);
-            SetUpJobsInSanFran(jobTimestampFromLocalDateTime);
-            LocalDateTime jobDateTime1130 = LocalDateTime.of(2016,4,15,11,30);
-            Timestamp jobTimestampFromLocalDateTime1130 = scheduleService.GetTimestamp(jobDateTime1130);
-            Timestamp jobTimestampFromLocalDateTime1130trunc = scheduleService.TruncateToDate(jobTimestampFromLocalDateTime1130);
-            SetUpJobsInStateCollege(jobTimestampFromLocalDateTime1130trunc);
-            jobDate = LocalDate.of(2016,4,15);
-            ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
-            ZonedDateTime endTime = startTime.plusHours(24);
-            List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
-            assertTrue(unassignedJobs.isEmpty());
-            } catch (Exception e) {
-            fail("Exception: " + e);
-        }
-    }
-
-    @Test
-    public void testGetScheduleByDateAndEmployeeID() throws Exception
-    {
-        LocalDate jobDate = LocalDate.of(2016,4,15);
+    public void testGetScheduleByDateAndEmployeeID(LocalDate jobDate) throws Exception
+    {   // log the time now
+        LocalDateTime printDateTime = LocalDateTime.now();
+        System.out.println("\nSchedule print time: " + printDateTime);
+        // need to convert to ZonedDateTime start and end times
         ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
         ZonedDateTime endTime = startTime.plusHours(24);
         List<Employee> employees = employeeDao.getListByRole("Technician");
@@ -426,7 +458,75 @@ public class ScheduleServiceTest extends CommonTest {
 
             }
         }
-
-
     }
+
+
+    @Test
+    public void testGetScheduleByDateAndEmployeeID1() throws Exception
+    {
+        LocalDate jobDate = LocalDate.of(2016,4,15);
+        ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
+        ZonedDateTime endTime = startTime.plusHours(24);
+        List<Employee> employees = employeeDao.getListByRole("Technician");
+        // log the time now
+        LocalDateTime printDateTime = LocalDateTime.now();
+        logger.info("\nSchedule print time:" + printDateTime);
+        for (Employee employee : employees)
+        {
+            logger.info("\n\n****************************************************************");
+            logger.info("\n"+employee.getFirstName()+" "+ employee.getLastName()+" for "+jobDate.toString());
+            List<Schedule> employeeAssignments = scheduleService.GetScheduleByDateAndEmployeeID(jobDate,employee.getEmployeeId());
+            for(Schedule assignment : employeeAssignments)
+            {
+                logger.info("\n****************");
+                String type = assignment.getType();
+                if (type.equals("JOB"))
+                {
+                    Job job = jobDao.get(assignment.getJobId());
+                    Location jobLocation = locationDao.get(job.getJobLocation());
+                    logger.info("\n"+assignment.getType()+" "+job.getJobName());
+                    logger.info("\n"+jobLocation.getFormattedAddress());
+                    logger.info("\nEstimated Travel Time (minutes): "+assignment.getTravelTime()+" Scheduled Start: "+
+                            scheduleService.GetLocalTime(assignment.getStartTime()));
+                    logger.info("\nScheduled Duration (minutes): "+ assignment.getDuration()+" Scheduled Finish: "+
+                            scheduleService.GetLocalTime(assignment.getEndTime()));
+                }
+                else
+                {
+                    logger.info("\n"+assignment.getType()+" Start: "+scheduleService.GetLocalTime(assignment.getStartTime()));
+                    logger.info("\nScheduled Duration (minutes): "+ assignment.getDuration()+" Scheduled Finish: "+
+                            scheduleService.GetLocalTime(assignment.getEndTime()));
+                }
+
+            }
+        }
+    }
+
+
+    @Test
+    public void testScheduleUnAssignedJobs1()
+    {
+        try
+        {
+            SetUp4Employees();
+            LocalDate jobDate = LocalDate.of(2016,4,15);
+            Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
+            SetUpJobs1InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            LocalDateTime jobDateTime = LocalDateTime.of(2016,4,15,0,0);
+            Timestamp jobTimestampFromLocalDateTime = scheduleService.GetTimestamp(jobDateTime);
+            SetUpJobsInSanFran(jobTimestampFromLocalDateTime);
+            LocalDateTime jobDateTime1130 = LocalDateTime.of(2016,4,15,11,30);
+            Timestamp jobTimestampFromLocalDateTime1130 = scheduleService.GetTimestamp(jobDateTime1130);
+            Timestamp jobTimestampFromLocalDateTime1130trunc = scheduleService.TruncateToDate(jobTimestampFromLocalDateTime1130);
+            SetUpJobsInStateCollege(jobTimestampFromLocalDateTime1130trunc);
+            jobDate = LocalDate.of(2016,4,15);
+            ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
+            ZonedDateTime endTime = startTime.plusHours(24);
+            List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
+            assertTrue(unassignedJobs.isEmpty());
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
 }
