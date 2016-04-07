@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -47,9 +48,11 @@ public class ScheduleServiceTest extends CommonTest {
     @Before
     public void setUp() throws Exception{}
 
-
-    private void SetUp4Employees() throws Exception {
-        // setup 3 employees and accounts
+    //@Test
+    public void SetUp4Employees() throws Exception {
+        // setup 4 employees and accounts all having same pswd
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String pswdAllAccounts = passwordEncoder.encode("test1234");
         Location location1 = new Location();
         location1.setStreetNumber("725");
         location1.setStreet("S. Atherton");
@@ -72,10 +75,8 @@ public class ScheduleServiceTest extends CommonTest {
         employeeDao.persist(employee1);
         EmployeeAccount employeeAccount1 = new EmployeeAccount();
         employeeAccount1.setUsername("djg");
-        employeeAccount1.setPassword("password");
+        employeeAccount1.setPassword(pswdAllAccounts);
         employeeAccount1.setEmployee(employee1);
-        //employeeAccount1.setCreatedBy("srg");
-        //employeeAccount1.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
         employeeAccountDao.persist(employeeAccount1);
         Location location2 = new Location();
         location2.setStreetNumber("442");
@@ -101,7 +102,7 @@ public class ScheduleServiceTest extends CommonTest {
         employeeDao.persist(employee2);
         EmployeeAccount employeeAccount2 = new EmployeeAccount();
         employeeAccount2.setUsername("phg");
-        employeeAccount2.setPassword("password");
+        employeeAccount2.setPassword(pswdAllAccounts);
         employeeAccount2.setEmployee(employee2);
         //employeeAccount2.setCreatedBy("srg");
         //employeeAccount2.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -130,7 +131,7 @@ public class ScheduleServiceTest extends CommonTest {
         employeeDao.persist(employee3);
         EmployeeAccount employeeAccount3 = new EmployeeAccount();
         employeeAccount3.setUsername("jag");
-        employeeAccount3.setPassword("password");
+        employeeAccount3.setPassword(pswdAllAccounts);
         employeeAccount3.setEmployee(employee3);
         employeeAccountDao.persist(employeeAccount3);
         Location location4 = new Location();
@@ -155,7 +156,7 @@ public class ScheduleServiceTest extends CommonTest {
         employeeDao.persist(employee4);
         EmployeeAccount employeeAccount4 = new EmployeeAccount();
         employeeAccount4.setUsername("jng");
-        employeeAccount4.setPassword("password");
+        employeeAccount4.setPassword(pswdAllAccounts);
         employeeAccount4.setEmployee(employee4);
         //employeeAccount4.setCreatedBy("srg");
         //employeeAccount4.setDateCreated(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -410,12 +411,12 @@ public class ScheduleServiceTest extends CommonTest {
                 SetUpJobs1InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
                 SetUpJobsInSanFran(jobTimestampFromLocalDate);
                 SetUpJobsInStateCollege(jobTimestampFromLocalDate);
-                jobDate = LocalDate.of(2016,4,15);
                 ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
                 ZonedDateTime endTime = startTime.plusHours(24);
                 List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
                 assertTrue(unassignedJobs.isEmpty());
                 testGetScheduleByDateAndEmployeeID(jobDate);
+                testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
         } catch (Exception e) {
             fail("Exception: " + e);
         }
@@ -460,9 +461,37 @@ public class ScheduleServiceTest extends CommonTest {
         }
     }
 
+    // to see clean schedule output in logger need to comment show sql line
+    // in com.psu.est.config.DataSourceConfig  hibernateProperties()
+    // this tests overflow into next available working days
+    @Test
+    public void testScheduleUnAssignedJobs1()
+    {
+        try {
+            //SetUp4Employees();
+            LocalDate jobDate = LocalDate.of(2016,4,15);
+            Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
+            SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            SetUpJobs1InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            SetUpJobsInSanFran(jobTimestampFromLocalDate);
+            SetUpJobsInStateCollege(jobTimestampFromLocalDate);
+            jobDate = LocalDate.of(2016,4,15);
+            ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
+            ZonedDateTime endTime = startTime.plusHours(24);
+            List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
+            assertTrue(unassignedJobs.isEmpty());
+            testGetScheduleByDateAndEmployeeID(jobDate);
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(2));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
 
     @Test
-    public void testGetScheduleByDateAndEmployeeID1() throws Exception
+    public void testGetScheduleByDateAndEmployeeID2() throws Exception
     {
         LocalDate jobDate = LocalDate.of(2016,4,15);
         ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
@@ -502,9 +531,9 @@ public class ScheduleServiceTest extends CommonTest {
         }
     }
 
-
     @Test
-    public void testScheduleUnAssignedJobs1()
+    // this one is testing time conversions
+    public void testScheduleUnAssignedJobs2()
     {
         try
         {
