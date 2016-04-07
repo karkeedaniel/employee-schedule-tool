@@ -5,10 +5,7 @@ import com.psu.est.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
@@ -49,13 +46,7 @@ public class EmployeeController {
         return employeeService.getByNotLikeRole(getRole());
     }
 
-    @RequestMapping(value = "/employee/persist", method = RequestMethod.PUT)
-    public Employee persist(@RequestBody Employee employee) {
-        employeeService.persist(employee);
-        return employee;
-    }
-
-    @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/employee/update", method = RequestMethod.PUT)
     public Employee update(@RequestBody Employee employee) {
         employeeService.update(employee);
         return employee;

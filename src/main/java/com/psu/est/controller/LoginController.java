@@ -37,11 +37,6 @@ public class LoginController {
         return new ModelAndView("reset");
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public ModelAndView registerPage() {
-        return new ModelAndView("register");
-    }
-
     @RequestMapping(value = "/approval", method = RequestMethod.GET)
     public ModelAndView approvalPage() {
         return new ModelAndView("approval");
