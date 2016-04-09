@@ -404,7 +404,7 @@ public class ScheduleServiceTest extends CommonTest {
     public void testScheduleUnAssignedJobs()
     {
         try {
-                SetUp4Employees();
+                  //SetUp4Employees();
                 LocalDate jobDate = LocalDate.of(2016,4,15);
                 Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
                 SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
@@ -416,8 +416,9 @@ public class ScheduleServiceTest extends CommonTest {
                 List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
                 assertTrue(unassignedJobs.isEmpty());
                 testGetScheduleByDateAndEmployeeID(jobDate);
-                testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
-        } catch (Exception e) {
+                testGetScheduleByDateAndEmployeeID(jobDate.plusDays(2));
+                testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+            } catch (Exception e) {
             fail("Exception: " + e);
         }
     }
@@ -469,6 +470,9 @@ public class ScheduleServiceTest extends CommonTest {
     {
         try {
             //SetUp4Employees();
+            Employee promotedEmp = employeeDao.getByEmployeeNum("T4");
+            promotedEmp.setRole("DIRECTOR");
+            employeeDao.update(promotedEmp);
             LocalDate jobDate = LocalDate.of(2016,4,15);
             Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
             SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
@@ -553,6 +557,43 @@ public class ScheduleServiceTest extends CommonTest {
             ZonedDateTime endTime = startTime.plusHours(24);
             List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
             assertTrue(unassignedJobs.isEmpty());
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
+    // to see clean schedule output in logger need to comment show sql line
+    // in com.psu.est.config.DataSourceConfig  hibernateProperties()
+    // schedule vacation or sick time on a day where the employee already has assignments
+    @Test
+    public void testSchedulePTO()
+    {
+        try {
+            //SetUp4Employees();
+            LocalDate jobDate = LocalDate.of(2016,4,15);
+            Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
+            SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            SetUpJobs1InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            SetUpJobsInSanFran(jobTimestampFromLocalDate);
+            SetUpJobsInStateCollege(jobTimestampFromLocalDate);
+            ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
+            ZonedDateTime endTime = startTime.plusHours(24);
+            List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
+            assertTrue(unassignedJobs.isEmpty());
+            testGetScheduleByDateAndEmployeeID(jobDate);
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(2));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(4));
+            //schedule vaca time for Jackie
+            Employee Jackie = employeeDao.getByEmployeeNum("T3");
+            unassignedJobs = scheduleService.SchedulePTO(startTime,endTime,Jackie,"VACATION");
+            assertTrue(unassignedJobs.isEmpty());
+            testGetScheduleByDateAndEmployeeID(jobDate);
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(2));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(4));
         } catch (Exception e) {
             fail("Exception: " + e);
         }

@@ -42,7 +42,7 @@ public class ScheduleService {
     private static final double maxTravelDistanceDefault = 35.0;
     private static final double maxTravelDistanceMax = 100.0;
 
-    // maximum days from a job preferred date that is can be schedules
+    // maximum days from a job preferred date that is can be scheduled
     private static final int maxDaysFromPreferredDate = 7; //up to one week later
 
     // tbd
@@ -60,6 +60,7 @@ public class ScheduleService {
     private LocationService locationService;
 
     // convert between java.time.ZonedDateTime and java.time.LocalDate time
+    // undocumented utitlities
 
     // ZonedDateTime to LocalDateTime is trivial since ZoneDateTime
     // has a LocalDateTime (+ timezone info)
@@ -67,7 +68,7 @@ public class ScheduleService {
     public java.time.LocalDate GetLocalDate(ZonedDateTime zonedDateTime) { return zonedDateTime.toLocalDate(); }
     public java.time.LocalTime GetLocalTime(ZonedDateTime zonedDateTime) { return zonedDateTime.toLocalTime(); }
     // Going back not so much since we need timezone, for now we assume all is in same, but this is where
-    // we would time localize instead of using thisZoneId
+    // we would time localize instead of using a common zone (thisZoneId)
     public java.time.ZonedDateTime GetZoneDateTime(java.time.LocalDateTime localDateTime)
     {
         return ZonedDateTime.of(localDateTime, thisZoneId);
@@ -82,6 +83,12 @@ public class ScheduleService {
     public java.time.ZonedDateTime GetZoneDateTime (java.time.LocalDate localDate, java.time.LocalTime localTime)
     {
         return ZonedDateTime.of(localDate,localTime, thisZoneId);
+    }
+
+    public java.time.ZonedDateTime TruncateToDate(java.time.ZonedDateTime time)
+    {
+        // say this day starts at 00:00:00
+        return ZonedDateTime.of(time.toLocalDate(),LocalTime.MIDNIGHT, thisZoneId);
     }
 
     // java.sql.timestamp (used in database as DATETIME) to and from ZonedDateTime
@@ -151,7 +158,8 @@ public class ScheduleService {
     public boolean IsTimeDuringWorkWeek(ZonedDateTime time)
     {
         java.time.DayOfWeek weekDay = time.getDayOfWeek();
-        if ( weekDay.getValue() >= workWeekStart.getValue() && weekDay.getValue()<= workWeekEnd.getValue())
+        if ( weekDay.getValue() >= workWeekStart.getValue() && weekDay.getValue()<= workWeekEnd.getValue()&&
+                !(weekDay.getValue()==workWeekEnd.getValue() && !time.toLocalTime().isBefore(workDayEndTime)))
             return true;
         else
             return false;
@@ -159,12 +167,14 @@ public class ScheduleService {
 
     public ZonedDateTime GetNextValidWorkDay(ZonedDateTime time)
     {
+        // always truncate to midnight of that day!
 
-        if (IsTimeDuringWorkWeek(time)) return time;
+        if (IsTimeDuringWorkWeek(time))
+            return TruncateToDate(time);
         // add 24 hours unil find next valis work day
         ZonedDateTime nextWorkDay = time;
         while (!IsTimeDuringWorkWeek(nextWorkDay)) nextWorkDay = nextWorkDay.plusDays(1);
-        return nextWorkDay;
+        return TruncateToDate(nextWorkDay);
     }
 
     Duration GetEmployeeTimeScheduledForInterval(Employee employee, ZonedDateTime startTime, ZonedDateTime endTime)
@@ -176,7 +186,7 @@ public class ScheduleService {
             long thisTimeInSeconds = 0;
             if (schedule.getType().equalsIgnoreCase("JOB"))
                 thisTimeInSeconds = (schedule.getTravelTime() + schedule.getDuration())*60;
-            else {
+            else if (!schedule.getType().equalsIgnoreCase("BREAK")){
                 LocalDateTime sStartTime = GetLocalDateTime(schedule.getStartTime());
                 LocalDateTime sEndTime = GetLocalDateTime(schedule.getEndTime());
                 thisTimeInSeconds = Duration.between(sStartTime, sEndTime).getSeconds();
@@ -215,7 +225,7 @@ public class ScheduleService {
         Map<Integer, Job> locationToJobMap = new HashMap<Integer, Job>();
         for (Schedule item : scheduleAssignments)
         {
-            if (item.getType()=="JOB")
+            if (item.getType().equalsIgnoreCase("JOB"))
             {
                 Job thisJob = jobDao.get(item.getJobId());
                 wayPoints.add(locationDao.get(thisJob.getJobLocation()));
@@ -234,15 +244,16 @@ public class ScheduleService {
         // including lunch
         for (Schedule assgn : scheduleAssignments)
         {
-            if (assgn.getType()=="JOB")
+            if (assgn.getType().equalsIgnoreCase("JOB"))
             {
                 Job thisJob = jobDao.get(assgn.getJobId());
                 thisJob.setJobState("UNASSIGNED");
                 thisJob.setJobDate(GetTimestamp(jobSchedulingWindowStart));
                 jobDao.update(thisJob);
             }
-            // to do, initialize job states
-            scheduleDao.delete(assgn);
+            // don't remove PTO here - need a special function
+            if (!assgn.getType().equalsIgnoreCase("SICK") && !assgn.getType().equalsIgnoreCase("VACATION"))
+                scheduleDao.delete(assgn);
         }
         ZonedDateTime schedCursor = jobSchedulingWindowStart;
         schedCursor = AdvanceTimeCursor(schedCursor,workDayStartOffset.toMinutes() );
@@ -398,6 +409,13 @@ public class ScheduleService {
         return unScheduledJobList;
     }
 
+    public List<Job> ScheduleUnAssignedJobs(java.time.LocalDate date)
+    {
+        ZonedDateTime startTime = this.GetZoneDateTime(date);
+        ZonedDateTime endTime = startTime.plusHours(24);
+        return ScheduleUnAssignedJobs(startTime,endTime);
+    }
+
     public List<Job> ScheduleUnAssignedJobs(ZonedDateTime startTime, ZonedDateTime endTime, double max_distance, int max_days_window)
     {
         // need to truncate all job starttimes to midnight since they may have been scheduled before
@@ -414,10 +432,11 @@ public class ScheduleService {
             // in and out of database is via Timestamp
             // truncate to midnight on same date
             job.setJobDate(TruncateToDate(job.getJobDate()));
+            Timestamp preferredDate = job.getJobDate();
             // try to scedule from the preferred date to the preferred date + window
             for(int i=0; i<= max_days_window; i++)
             {
-                ZonedDateTime nextWorkDay = GetZonedDateTime(job.getJobDate());
+                ZonedDateTime nextWorkDay = GetZonedDateTime(preferredDate);
                 nextWorkDay = GetNextValidWorkDay(nextWorkDay.plusDays(i));
                 job.setJobDate(GetTimestamp(nextWorkDay));
                 jobDao.update(job);
@@ -427,7 +446,14 @@ public class ScheduleService {
                     break;
                 }
             }
-            if (!thisJobScheduled) unScheduledJobList.add(job);
+            if (!thisJobScheduled)
+            {
+                // set back to original preferred date
+                job.setJobDate(preferredDate);
+                jobDao.update(job);
+                unScheduledJobList.add(job);
+            }
+
         }
         // return list of jobs that could not be scheduled
         return unScheduledJobList;
@@ -440,10 +466,56 @@ public class ScheduleService {
         return scheduleDao.GetScheduleByIntervalAndEmployeeID(startTime, endTime,employee_id);
     }
 
-    public boolean SchedulePTO(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id)
+    public List<Job>  SchedulePTO(ZonedDateTime startTime, ZonedDateTime endTime, Employee employee, String ptoType)
     {
-        return true;
-    }
+        List<Schedule> scheduleAssignments = scheduleDao.GetScheduleByIntervalAndEmployeeID(startTime, endTime, employee.getEmployeeId());
+
+        // remove employees assignments for the interval and initialize for later rescheduling
+        for (Schedule assgn : scheduleAssignments)
+        {
+            if (assgn.getType().contentEquals("JOB"))
+            {
+                Job thisJob = jobDao.get(assgn.getJobId());
+                thisJob.setJobState("UNASSIGNED");
+                // truncate jobDate to midnight same day for rescheduling
+                thisJob.setJobDate(TruncateToDate(thisJob.getJobDate()));
+                jobDao.update(thisJob);
+            }
+            // delete all assignments regardless of type
+            scheduleDao.delete(assgn);
+        }
+
+        ZonedDateTime schedCursor = startTime;
+        schedCursor = AdvanceTimeCursor(schedCursor,workDayStartOffset.toMinutes() );
+        while (schedCursor.isBefore(endTime))
+        {
+            if (!schedCursor.toLocalTime().isBefore(workDayEndTime))
+            {
+                schedCursor = GetNextValidWorkDay(schedCursor);
+                // truncate to midnight and advance to begining of next working day
+                schedCursor = schedCursor.truncatedTo(ChronoUnit.DAYS);
+                schedCursor = AdvanceTimeCursor(schedCursor,workDayStartOffset.toMinutes());
+                if (!schedCursor.isBefore(endTime)) break;
+            }
+            // find next end of day from sched cursor
+            ZonedDateTime endOfThisWorkday = schedCursor.truncatedTo(ChronoUnit.DAYS);
+            endOfThisWorkday = endOfThisWorkday.plusMinutes(Duration.between(LocalTime.parse("00:00:00"),workDayEndTime).toMinutes());
+            if (endOfThisWorkday.isBefore(endTime))
+            {
+                //schedule entire day
+                Duration duration = Duration.between(schedCursor,endOfThisWorkday);
+                schedCursor = ScheduleNonJob(schedCursor, (int)duration.toMinutes(), ptoType, employee);
+            }
+            else
+            {
+                //schedule just until endTIme
+                Duration duration = Duration.between(schedCursor, endTime);
+                schedCursor = ScheduleNonJob(schedCursor, (int) duration.toMinutes(), ptoType, employee);
+            }
+         }
+        // schedule the jobs that were unassigned
+        return ScheduleUnAssignedJobs(startTime, endTime);
+     }
 
     public boolean ScheduleEmployeeDay(ZonedDateTime startTime, int employee_id)
     {

@@ -53,6 +53,15 @@ public class Location implements DomainObject, Serializable {
         this.formattedAddress = streetNumber+" "+street+", "+city+", "+state+" "+zip;
         locationService.resolveAddress(this);
     }
+
+    static Integer GenUniqueKey(Integer scheduleID, Integer jobID)
+    {
+        //a >= b ? a * a + a + b : a + b * b;  where a, b >= 0, aka Szudzik's function
+        Integer ret;
+        ret= (scheduleID>=jobID)? (scheduleID*scheduleID)+scheduleID+jobID :
+                                  (jobID*jobID)+scheduleID;
+        return ret;
+    }
 */
     @Id
     @GeneratedValue
