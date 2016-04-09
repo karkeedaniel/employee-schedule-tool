@@ -59,5 +59,4 @@ public class EmployeeDetailService implements UserDetailsService {
         setAuths.add(new SimpleGrantedAuthority(employeeRole));
         return new ArrayList<>(setAuths);
     }
-
 }

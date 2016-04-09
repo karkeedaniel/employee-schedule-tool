@@ -12,26 +12,28 @@ angular.module("estApp")
             $scope.employeeList = response.data;
         });
 
-        $scope.add = function(employee) {
+        $scope.add = function(employee, location) {
+            var employeeLocation = {employee, location};
+            employeeLocation.employee = employee;
+            employeeLocation.location = location;
             $http({
-                method: "put",
-                url: "/employee/persist",
-                data: employee
+                method: "post",
+                url: "/employee-location/persist",
+                data: employeeLocation
             }).then(function successCallback(response) {
                 // TODO - need to work on alert message.
                 $window.alert("Employee successfully added.");
+                $scope.employee = null;
+                $scope.location = null;
             }, function errorCallback(response) {
+                console.log(response);
                 if (response.status == 409) {
                     $scope.error = true;
                 }
-            })
+            });
         };
 
         $scope.return = function() {
             $state.go("main.employee");
         };
-
-        $scope.sayHello = function(employee) {
-            console.log(employee);
-        }
     });
