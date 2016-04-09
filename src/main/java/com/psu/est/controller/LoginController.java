@@ -7,7 +7,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,21 +24,6 @@ public class LoginController {
         model.addAttribute("user", getUserName());
         model.addAttribute("role", getRole());
         return model;
-    }
-
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ModelAndView mainPage() {
-        return new ModelAndView("main");
-    }
-
-    @RequestMapping(value = "/reset", method = RequestMethod.GET)
-    public ModelAndView resetPasswordPage() {
-        return new ModelAndView("reset");
-    }
-
-    @RequestMapping(value = "/approval", method = RequestMethod.GET)
-    public ModelAndView approvalPage() {
-        return new ModelAndView("approval");
     }
 
     private String getUserName() {
