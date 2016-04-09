@@ -3,6 +3,7 @@ package com.psu.est.dao.impl;
 import com.psu.est.dao.common.CommonTest;
 import com.psu.est.dao.interfaces.EmployeeDao;
 import com.psu.est.model.Employee;
+import com.psu.est.model.EmployeeAccount;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -49,8 +50,9 @@ public class EmployeeDaoImplTest extends CommonTest {
             Calendar calendar = GregorianCalendar.getInstance();
             calendar.set(1982, 5, 15);
             employee.setDob(new Date(calendar.getTimeInMillis()));
-            employee.setSsn("123456789");
-            employee.setRole("MANAGER");
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            employee.setSsn(encoder.encode("123456789"));
+            employee.setRole("DIRECTOR");
             employee.setStatus("ACTIVE");
             employeeDao.persist(employee);
             assertNotNull(employee);
@@ -125,6 +127,21 @@ public class EmployeeDaoImplTest extends CommonTest {
             for (Employee employee: employeeList) {
                 logger.info(employee.toString());
             }
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
+
+    @Test
+    public void testGetByEmail() {
+        try {
+            Employee employee = employeeDao.getByEmail("hjs123@gmail.com");
+            assertNotNull(employee);
+            logger.info(employee);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(employee.getDob().getTime());
+            logger.info(calendar.getWeekYear());
+
         } catch (Exception e) {
             fail("Exception: " + e);
         }

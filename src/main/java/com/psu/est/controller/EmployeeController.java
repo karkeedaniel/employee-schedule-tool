@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,38 +23,12 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @RequestMapping(value = "/employee", method = RequestMethod.GET)
-    public ModelAndView employeePage() {
-        return new ModelAndView("employee");
-    }
-
-    @RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
-    public ModelAndView addEmployeePage() {
-        return new ModelAndView("addEmployee");
-    }
-
-    @RequestMapping(value = "/editEmployee", method = RequestMethod.GET)
-    public ModelAndView editEmployeePage() {
-        return new ModelAndView("editEmployee");
-    }
-
-    @RequestMapping(value = "/schedule", method = RequestMethod.GET)
-    public ModelAndView schedulePage() {
-        return new ModelAndView("schedule");
-    }
-
     @RequestMapping(value = "/employee/get-all", method = RequestMethod.GET)
     public List<Employee> getAll() {
         return employeeService.getByNotLikeRole(getRole());
     }
 
-    @RequestMapping(value = "/employee/persist", method = RequestMethod.PUT)
-    public Employee persist(@RequestBody Employee employee) {
-        employeeService.persist(employee);
-        return employee;
-    }
-
-    @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/employee/update", method = RequestMethod.PUT)
     public Employee update(@RequestBody Employee employee) {
         employeeService.update(employee);
         return employee;

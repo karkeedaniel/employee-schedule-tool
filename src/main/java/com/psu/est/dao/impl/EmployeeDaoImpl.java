@@ -36,7 +36,7 @@ public class EmployeeDaoImpl extends GenericDaoImpl<Employee> implements Employe
     }
 
     @Override
-    public List<Employee> getListByRole(String role){
+    public List<Employee> getListByRole(String role) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Employee.class);
         if (role != null){
             // using like until we move to enums for role
@@ -47,4 +47,10 @@ public class EmployeeDaoImpl extends GenericDaoImpl<Employee> implements Employe
         else return null;
     }
 
+    @Override
+    public Employee getByEmail(String email) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Employee.class);
+        criteria.add(Restrictions.eq("email", email));
+        return (Employee) criteria.uniqueResult();
+    }
 }

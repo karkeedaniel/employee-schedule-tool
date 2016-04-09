@@ -24,5 +24,17 @@ public interface EmployeeDao extends GenericDao<Employee> {
      */
     List<Employee> getByNotLikeRole(List<String> roleList);
 
+    /**
+     *
+     * @param role
+     * @return
+     */
     List<Employee> getListByRole(String role);
+
+    /**
+     *
+     * @param email
+     * @return
+     */
+    Employee getByEmail(String email);
 }
