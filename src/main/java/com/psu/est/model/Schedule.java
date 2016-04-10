@@ -19,15 +19,6 @@ public class Schedule implements DomainObject {
     private Integer jobId;
     private Integer employeeId;
 
-    static Integer GenUniqueKey(Integer scheduleID, Integer jobID)
-    {
-        //a >= b ? a * a + a + b : a + b * b;  where a, b >= 0, aka Szudzik's function
-        Integer ret;
-        ret= (scheduleID>=jobID)? (scheduleID*scheduleID)+scheduleID+jobID :
-                                  (jobID*jobID)+scheduleID;
-        return ret;
-    }
-
     @Id
     @GeneratedValue
     @Column(name = "schedule_id", nullable = false)
