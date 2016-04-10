@@ -517,6 +517,35 @@ public class ScheduleService {
         return ScheduleUnAssignedJobs(startTime, endTime);
      }
 
+    public void DeScheduleAllAssignments(ZonedDateTime startTime, ZonedDateTime endTime, int employeeId)
+    {
+        List<Job> unassignedJobs = scheduleDao.RemoveScheduleByIntervalAndEmployeeID(startTime, endTime, employeeId);
+        // if any jobs were in the interval they need to be rescheduled
+        if (!unassignedJobs.isEmpty()) ScheduleUnAssignedJobs(startTime, endTime);
+
+    }
+
+    public void  DeSchedulePTO(ZonedDateTime startTime, ZonedDateTime endTime, Employee employee)
+    {
+        DeScheduleAllAssignments(startTime, endTime, employee.getEmployeeId());
+
+    }
+
+    public void RemoveScheduleForJob(Job job)
+    {
+        Schedule schedAssignment = scheduleDao.GetScheduleByJobId(job.getJobId());
+        if (schedAssignment != null && schedAssignment.getType().equalsIgnoreCase("JOB") &&
+                (job.getJobState().equalsIgnoreCase("SCHEDULED") || job.getJobState().equalsIgnoreCase("UNASSIGNED") || job.getJobState().equalsIgnoreCase("REMOVALINPROGRESS")))
+        {
+            // need to remove all jobs for that employee for that day and reschedule them
+            ZonedDateTime startTime = TruncateToDate(GetZonedDateTime(job.getJobDate()));
+            ZonedDateTime endTime = startTime.plusHours(24);
+            int empId = schedAssignment.getEmployeeId();
+            DeScheduleAllAssignments(startTime, endTime, empId);
+        }
+
+    }
+
     public boolean ScheduleEmployeeDay(ZonedDateTime startTime, int employee_id)
     {
         return true;

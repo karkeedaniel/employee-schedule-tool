@@ -598,5 +598,44 @@ public class ScheduleServiceTest extends CommonTest {
             fail("Exception: " + e);
         }
     }
+    // followinf test deletes all jobs between start time and end time
+    // which should delete all assignment for them as well
+    @Test
+    public void testDeleteJobCascadeToSchedule()
+    {
+        try {
+            //SetUp4Employees();
+            LocalDate jobDate = LocalDate.of(2016,4,15);
+            Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
+            SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            SetUpJobs1InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));
+            SetUpJobsInSanFran(jobTimestampFromLocalDate);
+            SetUpJobsInStateCollege(jobTimestampFromLocalDate);
+            ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
+            ZonedDateTime endTime = startTime.plusHours(24);
+            List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
+            assertTrue(unassignedJobs.isEmpty());
+            // jobs should schedule on Friday and Monday
+            testGetScheduleByDateAndEmployeeID(jobDate);
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+             //schedule vaca time for Jackie for Fri
+            Employee Jackie = employeeDao.getByEmployeeNum("T3");
+            unassignedJobs = scheduleService.SchedulePTO(startTime,endTime,Jackie,"VACATION");
+            assertTrue(unassignedJobs.isEmpty());
+            // Jacie's Friday Jobs whould end up on Tuesday
+            testGetScheduleByDateAndEmployeeID(jobDate);
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(4));
+            // Delete all Friday's Jobs
+            List<Job> jobsToDelete = jobDao.GetJobsByIntervalAndState(startTime, endTime, "SCHEDULED");
+            for (Job job : jobsToDelete) jobDao.delete(job);
+            // Jackie's Friday Jobs whould end up on Tuesday
+            testGetScheduleByDateAndEmployeeID(jobDate);
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
+            testGetScheduleByDateAndEmployeeID(jobDate.plusDays(4));
+        } catch (Exception e) {
+            fail("Exception: " + e);
+        }
+    }
 
 }

@@ -2,12 +2,15 @@ package com.psu.est.dao.impl;
 
 import com.psu.est.dao.common.GenericDaoImpl;
 import com.psu.est.dao.interfaces.JobDao;
+import com.psu.est.dao.interfaces.ScheduleDao;
 import com.psu.est.model.Job;
 import com.psu.est.model.Schedule;
+import com.psu.est.service.ScheduleService;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,23 @@ public class JobDaoImpl extends GenericDaoImpl<Job> implements JobDao {
 
     public JobDaoImpl() {
         super(Job.class);
+    }
+
+    @Autowired
+    ScheduleService scheduleService;
+
+    @Override
+    public void delete(Job job)
+    {
+        // we should only delete UNASSIGNED and SCHEDULED Jobs, the others are saved for history
+        // if it is currently scheduled, remove assignment
+        if (job != null && (job.getJobState().equalsIgnoreCase("SCHEDULED")||job.getJobState().equalsIgnoreCase("UNASSIGNED")) ){
+            job.setJobState("REMOVALINPROGRESS");
+            scheduleService.RemoveScheduleForJob(job);
+        }
+
+        if (job.getJobState().equalsIgnoreCase("REMOVALINPROGRESS") || job.getJobState().equalsIgnoreCase("UNASSIGNED") || job.getJobState().equalsIgnoreCase("SCHEDULED"))
+            super.delete(job);
     }
 
 
