@@ -579,7 +579,9 @@ public class ScheduleServiceTest extends CommonTest {
             ZonedDateTime startTime = scheduleService.GetZonedDateTime(scheduleService.GetTimestamp(jobDate));
             ZonedDateTime endTime = startTime.plusHours(24);
             List<Job> unassignedJobs = scheduleService.ScheduleUnAssignedJobs(startTime,  endTime);
+            // were all jobs successfully schedules?
             assertTrue(unassignedJobs.isEmpty());
+            // print results for next 4 days (inc. weekend) for manual verification
             testGetScheduleByDateAndEmployeeID(jobDate);
             testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
             testGetScheduleByDateAndEmployeeID(jobDate.plusDays(2));
@@ -588,7 +590,9 @@ public class ScheduleServiceTest extends CommonTest {
             //schedule vaca time for Jackie
             Employee Jackie = employeeDao.getByEmployeeNum("T3");
             unassignedJobs = scheduleService.SchedulePTO(startTime,endTime,Jackie,"VACATION");
+            // were all jobs successfully rescheduled?
             assertTrue(unassignedJobs.isEmpty());
+            // print results for next 4 days (inc. weekend) for manual verification
             testGetScheduleByDateAndEmployeeID(jobDate);
             testGetScheduleByDateAndEmployeeID(jobDate.plusDays(1));
             testGetScheduleByDateAndEmployeeID(jobDate.plusDays(2));
@@ -598,7 +602,7 @@ public class ScheduleServiceTest extends CommonTest {
             fail("Exception: " + e);
         }
     }
-    // followinf test deletes all jobs between start time and end time
+    // following test deletes all jobs between start time and end time
     // which should delete all assignment for them as well
     @Test
     public void testDeleteJobCascadeToSchedule()
@@ -629,7 +633,10 @@ public class ScheduleServiceTest extends CommonTest {
             // Delete all Friday's Jobs
             List<Job> jobsToDelete = jobDao.GetJobsByIntervalAndState(startTime, endTime, "SCHEDULED");
             for (Job job : jobsToDelete) jobDao.delete(job);
-            // Jackie's Friday Jobs whould end up on Tuesday
+            // Jackie's Friday Jobs whould end up on Tuesday, all othere should have no schedule entries
+            // i.e. nothing should be scheduled for the 15th, note that this call accepts RegExp
+            List<Job> jobList = jobDao.GetJobsByIntervalAndState(startTime, endTime, "*");
+            assertTrue(jobList.isEmpty());
             testGetScheduleByDateAndEmployeeID(jobDate);
             testGetScheduleByDateAndEmployeeID(jobDate.plusDays(3));
             testGetScheduleByDateAndEmployeeID(jobDate.plusDays(4));
