@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,7 +71,7 @@ public class ScheduleDaoImpl extends GenericDaoImpl<Schedule> implements Schedul
             // tbd log an error
             return null;
         }
-        criteria.add(Restrictions.eq("job_id",job_id));
+        criteria.add(Restrictions.eq("jobId",job_id));
         List<Schedule> result = criteria.list();
         if (result.isEmpty())
             return null;
@@ -88,7 +89,48 @@ public class ScheduleDaoImpl extends GenericDaoImpl<Schedule> implements Schedul
     }
 
     @Override
-    public void RemoveScheduleByIntervalAndEmployeeID(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id)
+    public List<Job> RemoveScheduleByIntervalAndEmployeeID(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id)
+    {
+        List<Job> unassignedJobs = new ArrayList<Job>();
+        // convert java.time to java.sql.Timestamp, note that everything should be UTC in database, and changed
+        // to LocalDateTime as required, i.e. should have timezone resolved for each location and persisted
+        Timestamp start = new Timestamp(startTime.toInstant().toEpochMilli());
+        Timestamp end = new Timestamp(endTime.toInstant().toEpochMilli());
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Schedule.class);
+        if (employee_id>=1){
+            criteria.add(Restrictions.eq("employeeId",employee_id));
+        }
+        if (startTime !=null){
+            criteria.add(Restrictions.ge("startTime",start));
+        }
+        if (endTime !=null){
+            criteria.add(Restrictions.le("endTime",end));
+        }
+        criteria.addOrder(Order.asc("startTime"));
+        List<Schedule> results = criteria.list();
+        // remove these schedule assignments
+        for (Schedule item : results)
+        {
+            int job_id = ( item.getType().equalsIgnoreCase("JOB") && item.getJobId()>0 )? item.getJobId() : 0;
+            this.delete(item);
+            // if this was a job (not PTO) go change job state to unassigned
+            if (job_id != 0)
+            {
+                Job job = jobDao.get(job_id);
+                if (job != null && job.getJobState().equalsIgnoreCase("SCHEDULED"))
+                {
+                    job.setJobState("UNASSIGNED");
+                    jobDao.update(job);
+                    unassignedJobs.add(job);
+                }
+            }
+        }
+        return unassignedJobs;
+    }
+
+    @Override
+    public void RemoveScheduleByIntervalEmployeeIDAndJobType(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id, String schedItemType)
     {
         // convert java.time to java.sql.Timestamp, note that everything should be UTC in database, and changed
         // to LocalDateTime as required, i.e. should have timezone resolved for each location and persisted
@@ -97,14 +139,18 @@ public class ScheduleDaoImpl extends GenericDaoImpl<Schedule> implements Schedul
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Schedule.class);
         if (employee_id>=1){
-            criteria.add(Restrictions.eq("employee_id",employee_id));
+            criteria.add(Restrictions.eq("employeeId",employee_id));
         }
         if (startTime !=null){
-            criteria.add(Restrictions.ge("start_time",start));
+            criteria.add(Restrictions.ge("startTime",start));
         }
         if (endTime !=null){
-            criteria.add(Restrictions.le("end_time",end));
+            criteria.add(Restrictions.le("endTime",end));
         }
+        if (schedItemType != null){
+            String itemTypeLike = '%' + schedItemType + '%';
+            criteria.add(Restrictions.ilike("type",itemTypeLike));
+         }
         List<Schedule> results = criteria.list();
         // remove these schedule assignments
         for (Schedule item : results)
@@ -115,7 +161,7 @@ public class ScheduleDaoImpl extends GenericDaoImpl<Schedule> implements Schedul
             if (job_id != 0)
             {
                 Job job = jobDao.get(job_id);
-                if (job != null)
+                if (job != null && job.getJobState().equalsIgnoreCase("SCHEDULED"))
                 {
                     job.setJobState("UNASSIGNED");
                     jobDao.update(job);
@@ -125,3 +171,6 @@ public class ScheduleDaoImpl extends GenericDaoImpl<Schedule> implements Schedul
     }
 
 }
+
+
+
