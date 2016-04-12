@@ -26,7 +26,6 @@ angular.module("estApp")
                 $scope.employee = null;
                 $scope.location = null;
             }, function errorCallback(response) {
-                console.log(response);
                 if (response.status == 409) {
                     $scope.error = true;
                 }
