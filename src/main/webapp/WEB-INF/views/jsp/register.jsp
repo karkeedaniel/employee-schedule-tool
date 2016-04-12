@@ -29,7 +29,7 @@
                             Account has been successfully created.
                         </div>
                         <div ng-hide="success">
-                            <form class="form-horizontal" name="registerForm" ng-submit="register(registration)" novalidate>
+                            <form class="form-horizontal" name="registerForm" ng-submit="register(registration)" autocomplete="off" novalidate>
                                 <div class="form-group"
                                      ng-class="{'has-success has-feedback': registerForm.email.$valid, 'has-error has-feedback': !registerForm.email.$valid && registerForm.email.$dirty}">
                                     <label for="email" class="col-xs-2 control-label">Email</label>
