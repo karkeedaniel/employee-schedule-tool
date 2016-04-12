@@ -42,10 +42,10 @@
                         <div class="col-xs-4">
                             <div class="form-group"
                                  ng-class="{'has-success has-feedback': addEmployeeForm.middleName.$valid, 'has-error has-feedback': !addEmployeeForm.middleName.$valid && addEmployeeForm.middleName.$dirty}">
-                                <label for="middleName">First name</label>
+                                <label for="middleName">Middle name</label>
                                 <input type="text" class="form-control" id="middleName" name="middleName"
                                        placeholder="Middle Name" ng-model="employee.middleName"
-                                       ng-pattern="/^[a-zA-Z0-9]+$/" required>
+                                       ng-pattern="/^[a-zA-Z0-9]+$/">
                                 <span ng-show="addEmployeeForm.middleName.$valid"
                                       class="glyphicon glyphicon-ok form-control-feedback"></span>
                                 <span ng-show="!addEmployeeForm.middleName.$valid && addEmployeeForm.middleName.$dirty"
@@ -128,9 +128,10 @@
                             <div class="form-group">
                                 <label for="role">Role</label>
                                 <select class="form-control" id="role" ng-model="employee.role" required>
-                                    <option value="MANAGER">Manager</option>
-                                    <option value="PROJECT MANAGER">Project Manager</option>
-                                    <option value="TECHNICIAN">Technician</option>
+                                    <option value="DIRECTOR">DIRECTOR</option>
+                                    <option value="MANAGER">MANAGER</option>
+                                    <option value="PM">PROJECT MANAGER</option>
+                                    <option value="TECHNICIAN">TECHNICIAN</option>
                                 </select>
                             </div>
                         </div>
@@ -138,8 +139,8 @@
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select class="form-control" id="status" ng-model="employee.status" required>
-                                    <option value="ACTIVE">Active</option>
-                                    <option value="INACTIVE">Inactive</option>
+                                    <option value="ACTIVE">ACTIVE</option>
+                                    <option value="INACTIVE">INACTIVE</option>
                                 </select>
                             </div>
                         </div>
