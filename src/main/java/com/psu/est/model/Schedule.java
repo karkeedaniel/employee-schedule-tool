@@ -37,7 +37,7 @@ public class Schedule implements DomainObject {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = type.toUpperCase();
     }
 
     @Basic

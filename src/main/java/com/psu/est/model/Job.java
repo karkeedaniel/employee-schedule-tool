@@ -116,7 +116,7 @@ public class Job implements DomainObject {
     }
 
     public void setJobState(String jobState) {
-        this.jobState = jobState;
+        this.jobState = jobState.toUpperCase();
     }
 
     @Basic

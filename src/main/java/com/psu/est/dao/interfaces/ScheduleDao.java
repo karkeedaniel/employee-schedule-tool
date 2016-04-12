@@ -2,6 +2,7 @@ package com.psu.est.dao.interfaces;
 
 import com.psu.est.dao.common.GenericDao;
 import com.psu.est.dao.common.GenericDaoImpl;
+import com.psu.est.model.Job;
 import com.psu.est.model.Schedule;
 
 import java.sql.Date;
@@ -17,6 +18,8 @@ public interface ScheduleDao extends GenericDao<Schedule> {
 
     public Schedule GetScheduleByJobId(int job_id);
 
-    public void RemoveScheduleByIntervalAndEmployeeID(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id);
+    public List<Job> RemoveScheduleByIntervalAndEmployeeID(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id);
+
+    public void RemoveScheduleByIntervalEmployeeIDAndJobType(ZonedDateTime startTime, ZonedDateTime endTime, int employee_id, String jobType);
 
 }
