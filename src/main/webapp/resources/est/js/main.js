@@ -16,9 +16,14 @@ angular.module("estApp")
                 {name: "Approval", url: ".approval"}
             ];
             $state.go($scope.screens[0].url);
-        } else if ($rootScope.role === "TECHNICIAN") {
+        } else if ($rootScope.role === "PM") {
             $scope.screens = [
                 {name: "Job", url: ".job"}
+            ];
+            $state.go($scope.screens[0].url);
+        } else if ($rootScope.role === "TECHNICIAN") {
+            $scope.screens = [
+                {name: "Schedule", url: ".schedule"}
             ];
             $state.go($scope.screens[0].url);
         }

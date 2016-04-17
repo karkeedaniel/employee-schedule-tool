@@ -29,6 +29,10 @@ public class EmployeeAccountService {
     @Autowired
     private EmployeeAccountDao employeeAccountDao;
 
+    /**
+     *
+     * @param registration
+     */
     public void register(Registration registration) {
         Employee employee = employeeDao.getByEmail(registration.getEmail());
         if(employee != null) {
@@ -47,5 +51,14 @@ public class EmployeeAccountService {
         } else {
             throw new ValidationException();
         }
+    }
+
+    /**
+     *
+     * @param username
+     * @return
+     */
+    public EmployeeAccount getByUsername(String username) {
+        return employeeAccountDao.getByUsername(username);
     }
 }

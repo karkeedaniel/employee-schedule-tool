@@ -131,4 +131,18 @@ public class Schedule implements DomainObject {
         result = 31 * result + (employeeId != null ? employeeId.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "scheduleId=" + scheduleId +
+                ", type='" + type + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", duration=" + duration +
+                ", travelTime=" + travelTime +
+                ", jobId=" + jobId +
+                ", employeeId=" + employeeId +
+                '}';
+    }
 }
