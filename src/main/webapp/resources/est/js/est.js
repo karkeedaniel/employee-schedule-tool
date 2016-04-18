@@ -45,6 +45,20 @@ angular.module("estApp")
                     }
                 }
             })
+            .state("main.job", {
+                views: {
+                    "sectionView": {
+                        templateUrl: "/job"
+                    }
+                }
+            })
+            .state("main.job.add", {
+                views: {
+                    "sectionView@main": {
+                        templateUrl: "/addJob"
+                    }
+                }
+            })
             .state("main.employee.schedule", {
                 views: {
                     "sectionView@main": {
