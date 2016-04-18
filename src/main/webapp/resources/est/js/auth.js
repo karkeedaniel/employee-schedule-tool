@@ -14,6 +14,7 @@ angular.module("estApp")
             }).then(function successCallback(response) {
                 $rootScope.user = response.data.user;
                 $rootScope.role = response.data.role;
+                $rootScope.id = response.data.id;
                 $rootScope.authenticated = true;
                 callback && callback();
             }, function errorCallback() {
@@ -26,6 +27,8 @@ angular.module("estApp")
             authenticate(credentials, function() {
                 if ($rootScope.authenticated) {
                     $state.go("main");
+                } else {
+                    $scope.credentials = null;
                 }
                 $scope.error = !$rootScope.authenticated;
             });

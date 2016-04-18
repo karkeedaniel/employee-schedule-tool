@@ -6,18 +6,19 @@ import com.psu.est.dao.interfaces.ScheduleDao;
 import com.psu.est.model.Job;
 import com.psu.est.model.Schedule;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -168,6 +169,23 @@ public class ScheduleDaoImpl extends GenericDaoImpl<Schedule> implements Schedul
                 }
             }
         }
+    }
+
+    public List<Schedule> getByEmployeeIdAndStartTime(int employeeId, Timestamp startTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(startTime.getTime());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Timestamp fromStartTime = new Timestamp(calendar.getTimeInMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Timestamp toStartTime = new Timestamp(calendar.getTimeInMillis());
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Schedule.class, "schedule");
+        criteria.add(Restrictions.between("startTime", fromStartTime, toStartTime));
+        criteria.add(Restrictions.eq("employeeId", employeeId));
+        return criteria.list();
     }
 
 }

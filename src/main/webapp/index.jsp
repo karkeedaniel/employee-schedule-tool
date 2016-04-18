@@ -18,11 +18,13 @@
         <spring:url value="/resources/angular/js/angular.min.js" var="angularJS" />
         <spring:url value="/resources/angular/js/angular-animate.min.js" var="angularAnimateJS" />
         <spring:url value="/resources/angular-datatables/js/angular-datatables.min.js" var="angularDatatablesJS" />
+        <spring:url value="/resources/angular-ui-bootstrap/js/angular-ui-bootstrap.min.js" var="angularUiBootstrapJS" />
         <spring:url value="/resources/est/js/est.js" var="estJS" />
         <spring:url value="/resources/est/js/auth.js" var="authJS" />
         <spring:url value="/resources/est/js/main.js" var="mainJS" />
         <spring:url value="/resources/est/js/employee.js" var="employeeJS" />
         <spring:url value="/resources/est/js/register.js" var="registerJS" />
+        <spring:url value="/resources/est/js/schedule.js" var="jobJS" />
         <spring:url value="/resources/est/js/job.js" var="jobJS" />
 
         <script src="${jqueryJS}"></script>
@@ -30,7 +32,7 @@
         <script src="${angularAnimateJS}"></script>
         <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
         <script src="${angularDatatablesJS}"></script>
-        <%--<script src="http://dt.ishraf.com/bower_components/angular-datatables/dist/angular-datatables.js"></script>--%>
+        <script src="${angularUiBootstrapJS}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.2.5/ui-bootstrap-tpls.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
 
@@ -43,6 +45,7 @@
         <script src="${mainJS}"></script>
         <script src="${employeeJS}"></script>
         <script src="${registerJS}"></script>
+        <script src="${jobJS}"></script>
         <script src="${jobJS}"></script>
 
     </head>
@@ -62,7 +65,6 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right" ng-show="authenticated">
-                    <%--<li><a href="">Show Location</a></li>--%>
                     <li><a href="" ng-click="logout()">Logout</a></li>
                 </ul>
             </div>

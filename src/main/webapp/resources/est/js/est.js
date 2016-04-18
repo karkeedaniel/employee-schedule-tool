@@ -72,6 +72,13 @@ angular.module("estApp")
                         templateUrl: "/approval"
                     }
                 }
+            })
+            .state("main.schedule", {
+                views: {
+                    "sectionView": {
+                        templateUrl: "/schedule"
+                    }
+                }
             });
 
         $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";

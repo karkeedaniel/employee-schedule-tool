@@ -1,5 +1,7 @@
 package com.psu.est.controller;
 
+import com.psu.est.service.EmployeeAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +20,16 @@ import java.util.stream.Collectors;
 @RestController
 public class LoginController {
 
+    @Autowired
+    private EmployeeAccountService employeeAccountService;
+
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelMap userAndUrl() {
         ModelMap model = new ModelMap();
-        model.addAttribute("user", getUserName());
+        String username = getUserName();
+        model.addAttribute("user", username);
         model.addAttribute("role", getRole());
+        model.addAttribute("id", employeeAccountService.getByUsername(username).getEmployeeId());
         return model;
     }
 
