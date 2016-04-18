@@ -22,6 +22,8 @@
                                 <th>Job Phone</th>
                                 <th>Job Date</th>
                                 <th>Job State</th>
+                                <th>Edit</th>
+                                <th>Schedule</th>
                             </tr>
                         </thead>
                         <tbody>
