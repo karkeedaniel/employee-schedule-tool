@@ -43,10 +43,11 @@
                 </div>
             </div>
             <div class="panel-body">
-                <table datatable="ng" class="row-border hover">
+                <table datatable="ng" class="row-border hover" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
                     <thead>
                         <tr>
                             <th>Job Name</th>
+                            <th>Type</th>
                             <th>Start time</th>
                             <th>End time</th>
                             <th>Travel time</th>
@@ -57,6 +58,7 @@
                     </thead>
                         <tr ng-repeat="jobSchedule in jobScheduleList">
                             <td>{{jobSchedule.job.jobName}}</td>
+                            <td>{{jobSchedule.schedule.type}}</td>
                             <td>{{jobSchedule.schedule.startTime | date : 'shortTime'}}</td>
                             <td>{{jobSchedule.schedule.endTime | date : 'shortTime'}}</td>
                             <td>{{jobSchedule.schedule.travelTime}}</td>
@@ -70,7 +72,7 @@
                                         ng-click="event(jobSchedule.job)">
                                     Check In
                                 </button>
-                                <button ng-model="job.status" type="button" class="btn btn-small btn-primary"
+                                <button ng-model="job.status" type="button" class="btn btn-small btn-success"
                                         ng-disabled="jobSchedule.job.jobState == 'COMPLETED'"
                                         ng-show="jobSchedule.job.jobState == 'INPROGRESS' || jobSchedule.job.jobState == 'COMPLETED'"
                                         ng-Value="COMPLETE" ng-click="event(jobSchedule.job)">

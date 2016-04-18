@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ComponentScan (value = {
         "com.psu.est.dao.impl",
-        "com.psu.est.service",
-        "com.psu.est.serializer"
+        "com.psu.est.service"
 })
 @Import(value = {
         DataSourceConfig.class,

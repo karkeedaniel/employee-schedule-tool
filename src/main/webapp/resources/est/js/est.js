@@ -38,6 +38,9 @@ angular.module("estApp")
                     "sectionView@main": {
                         templateUrl: "/editEmployee"
                     }
+                },
+                params: {
+                    employeeId: null
                 }
             })
             .state("main.employee.schedule", {

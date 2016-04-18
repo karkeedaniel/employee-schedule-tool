@@ -35,4 +35,21 @@ angular.module("estApp")
         $scope.return = function() {
             $state.go("main.employee");
         };
+    })
+    .controller("editEmployeeCtrl", function($scope, $state, $stateParams, $http) {
+        $http({
+            method: "get",
+            url: "/employee-location/get",
+            params: {
+                'employeeId': $stateParams.employeeId
+            }
+        }).then(function successCallback(response) {
+            $scope.employee = response.data.employee;
+            $scope.location = response.data.location;
+            console.log($scope.location);
+        });
+
+        $scope.return = function() {
+            $state.go("main.employee");
+        };
     });

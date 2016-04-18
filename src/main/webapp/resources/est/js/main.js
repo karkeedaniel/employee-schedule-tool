@@ -6,14 +6,7 @@ angular.module("estApp")
 
         if ($rootScope.role === "DIRECTOR") {
             $scope.screens = [
-                {name: "Employee", url: ".employee"},
-                {name: "Approval", url: ".approval"}
-            ];
-            $state.go($scope.screens[0].url);
-        } else if ($rootScope.role === "MANAGER") {
-            $scope.screens = [
-                {name: "Employee", url: ".employee"},
-                {name: "Approval", url: ".approval"}
+                {name: "Employee", url: ".employee"}
             ];
             $state.go($scope.screens[0].url);
         } else if ($rootScope.role === "PM") {

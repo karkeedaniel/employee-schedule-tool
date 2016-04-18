@@ -48,7 +48,7 @@ public class EmployeeDaoImplTest extends CommonTest {
             employee.setEmail("hjs0116@est.com");
             employee.setGender("Male");
             Calendar calendar = GregorianCalendar.getInstance();
-            calendar.set(1982, 5, 15);
+            calendar.set(1982, Calendar.MAY, 15);
             employee.setDob(new Date(calendar.getTimeInMillis()));
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             employee.setSsn(encoder.encode("123456789"));

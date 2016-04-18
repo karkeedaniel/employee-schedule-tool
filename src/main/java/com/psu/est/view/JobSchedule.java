@@ -4,10 +4,12 @@ import com.psu.est.model.Job;
 import com.psu.est.model.Location;
 import com.psu.est.model.Schedule;
 
+import java.io.Serializable;
+
 /**
  * Created by danielkarkee on 4/13/16.
  */
-public class JobSchedule {
+public class JobSchedule implements Serializable {
 
     private Job job;
     private Schedule schedule;

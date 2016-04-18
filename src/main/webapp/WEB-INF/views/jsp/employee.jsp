@@ -36,7 +36,7 @@
                                 <td>{{employee.role}}</td>
                                 <td>{{employee.status}}</td>
                                 <td>
-                                    <a class="btn btn-small btn-primary" ui-sref=".edit"><i class="fa fa-pencil-square"></i></a>
+                                    <a class="btn btn-small btn-primary" ui-sref=".edit({employeeId : employee.employeeId})"><i class="fa fa-pencil-square"></i></a>
                                 </td>
                                 <td>
                                     <a class="btn btn-small btn-primary" ui-sref=".schedule"><i class="fa fa-calendar"></i></a>

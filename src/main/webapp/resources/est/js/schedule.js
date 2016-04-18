@@ -2,7 +2,7 @@
  * Created by danielkarkee on 4/6/16.
  */
 angular.module("estApp")
-    .controller("scheduleCtrl", function($rootScope, $scope, $http, $filter, $uibModal, $state) {
+    .controller("scheduleCtrl", function($rootScope, $scope, $http, $filter, $uibModal, $state, DTOptionsBuilder, DTColumnDefBuilder) {
         $scope.jobScheduleList = [];
 
         getByDate = function(date) {
@@ -73,8 +73,14 @@ angular.module("estApp")
             }, function errorCallback() {
                 $state.go("main.schedule");
             });
-        }
+        };
 
+        $scope.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('order', [2, 'desc']);
+        $scope.dtColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(6).notSortable(),
+            DTColumnDefBuilder.newColumnDef(7).notSortable()
+        ];
     })
     .controller('locationModalInstanceCtrl', function ($scope, $uibModalInstance, job) {
         $scope.job = job;
