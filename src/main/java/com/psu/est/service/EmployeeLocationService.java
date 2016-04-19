@@ -55,6 +55,7 @@ public class EmployeeLocationService {
      * @param employeeId
      * @return
      */
+    @Transactional
     public EmployeeLocation getByEmployeeId(int employeeId) {
         EmployeeLocation employeeLocation = new EmployeeLocation();
         Employee employee = employeeDao.get(employeeId);
@@ -64,5 +65,15 @@ public class EmployeeLocationService {
             employeeLocation.setLocation(location);
         }
         return employeeLocation;
+    }
+
+    /**
+     *
+     * @param employeeLocation
+     */
+    @Transactional
+    public void update(EmployeeLocation employeeLocation) {
+        employeeDao.update(employeeLocation.getEmployee());
+        locationDao.update(employeeLocation.getLocation());
     }
 }

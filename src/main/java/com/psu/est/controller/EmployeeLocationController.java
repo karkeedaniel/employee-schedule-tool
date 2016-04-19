@@ -25,4 +25,10 @@ public class EmployeeLocationController {
     public EmployeeLocation getByEmployeeId(@RequestParam("employeeId") int employeeId) {
         return employeeLocationService.getByEmployeeId(employeeId);
     }
+
+    @RequestMapping(value = "/employee-location/update", method = RequestMethod.PUT)
+    public EmployeeLocation update(@RequestBody EmployeeLocation employeeLocation) {
+        employeeLocationService.update(employeeLocation);
+        return employeeLocation;
+    }
 }

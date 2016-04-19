@@ -2,7 +2,7 @@
  * Created by danielkarkee on 3/25/16.
  */
 angular.module("estApp")
-    .controller("employeeCtrl", function($scope, $state, $http, $window) {
+    .controller("employeeCtrl", function($scope, $state, $http) {
         $scope.employeeList = [];
 
         $http({
@@ -21,14 +21,13 @@ angular.module("estApp")
                 url: "/employee-location/persist",
                 data: employeeLocation
             }).then(function successCallback(response) {
-                // TODO - need to work on alert message.
-                $window.alert("Employee successfully added.");
+                $scope.success = true;
+                $scope.error = false;
                 $scope.employee = null;
                 $scope.location = null;
             }, function errorCallback(response) {
-                if (response.status == 409) {
-                    $scope.error = true;
-                }
+                $scope.error = true;
+                $scope.sucess = false;
             });
         };
 
@@ -46,10 +45,28 @@ angular.module("estApp")
         }).then(function successCallback(response) {
             $scope.employee = response.data.employee;
             $scope.location = response.data.location;
-            console.log($scope.location);
         });
 
         $scope.return = function() {
             $state.go("main.employee");
         };
+
+        $scope.update = function(employee, location) {
+            var employeeLocation = {employee, location};
+            employeeLocation.employee = employee;
+            employeeLocation.location = location;
+            $http({
+                method: "put",
+                url: "/employee-location/update",
+                data: employeeLocation
+            }).then(function successCallback(response) {
+                $scope.success = true;
+                $scope.error = false;
+                $scope.employee = response.data.employee;
+                $scope.location = response.data.location;
+            }, function errorCallback(response) {
+                $scope.error = true;
+                $scope.sucess = false;
+            });
+        }
     });

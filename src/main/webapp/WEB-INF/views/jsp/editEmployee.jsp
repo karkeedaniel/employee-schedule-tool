@@ -21,6 +21,12 @@
 
             </div>
             <div class="panel-body">
+                <div class="alert alert-danger" ng-show="error">
+                    There was a problem updating account. Please check your entry and try again.
+                </div>
+                <div class="alert alert-success" ng-show="success">
+                    Account has been successfully updated.
+                </div>
                 <form name="editEmployeeForm" ng-submit="update(employee, location)" novalidate>
                     <h3>Personal Information</h3>
                     <div class="row">
@@ -65,7 +71,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-4">
+                        <div class="col-xs-2">
                             <div class="form-group">
                                 <label for="gender">Gender</label>
                                 <select class="form-control" id="gender" ng-model="employee.gender" required>
@@ -74,14 +80,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-4">
-                            <div class="form-group">
-                                <label for="dob">Date of Birth</label>
-                                <input type="date"  class="form-control" id="dob" ng-model="employee.dob" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-xs-4">
                             <div class="form-group"
                                  ng-class="{'has-success has-feedback': editEmployeeForm.contact.$valid, 'has-error has-feedback': !editEmployeeForm.contact.$valid && editEmployeeForm.contact.$dirty}">
@@ -95,7 +93,7 @@
                                       class="glyphicon glyphicon-remove form-control-feedback"></span>
                             </div>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-6">
                             <div class="form-group"
                                  ng-class="{'has-success has-feedback': editEmployeeForm.email.$valid, 'has-error has-feedback': !editEmployeeForm.email.$valid && editEmployeeForm.email.$dirty}">
                                 <label for="email">Email address</label>

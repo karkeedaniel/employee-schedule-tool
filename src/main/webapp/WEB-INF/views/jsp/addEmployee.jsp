@@ -21,7 +21,10 @@
             </div>
             <div class="panel-body">
                 <div class="alert alert-danger" ng-show="error">
-                    Employee already exists.
+                    Employee account already exists.
+                </div>
+                <div class="alert alert-success" ng-show="success">
+                    Employee account has been successfully created.
                 </div>
                 <form name="addEmployeeForm" ng-submit="add(employee, location)" novalidate>
                     <h3>Personal Information</h3>
