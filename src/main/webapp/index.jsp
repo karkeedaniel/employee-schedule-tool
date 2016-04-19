@@ -24,7 +24,7 @@
         <spring:url value="/resources/est/js/main.js" var="mainJS" />
         <spring:url value="/resources/est/js/employee.js" var="employeeJS" />
         <spring:url value="/resources/est/js/register.js" var="registerJS" />
-        <spring:url value="/resources/est/js/schedule.js" var="jobJS" />
+        <spring:url value="/resources/est/js/schedule.js" var="scheduleJS" />
         <spring:url value="/resources/est/js/job.js" var="jobJS" />
 
         <script src="${jqueryJS}"></script>
@@ -45,7 +45,7 @@
         <script src="${mainJS}"></script>
         <script src="${employeeJS}"></script>
         <script src="${registerJS}"></script>
-        <script src="${jobJS}"></script>
+        <script src="${scheduleJS}"></script>
         <script src="${jobJS}"></script>
 
     </head>
