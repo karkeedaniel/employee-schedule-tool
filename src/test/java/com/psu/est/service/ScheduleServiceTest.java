@@ -404,7 +404,8 @@ public class ScheduleServiceTest extends CommonTest {
     public void testScheduleUnAssignedJobs()
     {
         try {
-                  //SetUp4Employees();
+
+                SetUp4Employees();
                 LocalDate jobDate = LocalDate.of(2016,4,15);
                 Timestamp jobTimestampFromLocalDate = scheduleService.GetTimestamp(jobDate);
                 SetUpJobs2InFrisco(scheduleService.TruncateToDate(jobTimestampFromLocalDate));

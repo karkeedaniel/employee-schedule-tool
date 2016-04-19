@@ -25,6 +25,7 @@
         <spring:url value="/resources/est/js/employee.js" var="employeeJS" />
         <spring:url value="/resources/est/js/register.js" var="registerJS" />
         <spring:url value="/resources/est/js/schedule.js" var="jobJS" />
+        <spring:url value="/resources/est/js/job.js" var="jobJS" />
 
         <script src="${jqueryJS}"></script>
         <script src="${angularJS}"></script>
@@ -45,6 +46,8 @@
         <script src="${employeeJS}"></script>
         <script src="${registerJS}"></script>
         <script src="${jobJS}"></script>
+        <script src="${jobJS}"></script>
+
     </head>
     <body ng-controller="estCtrl">
     <nav class="navbar navbar-default navbar-static-top">

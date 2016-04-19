@@ -2,7 +2,12 @@
  * Created by danielkarkee on 3/2/16.
  */
 angular.module("estApp")
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
+
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
 
         $urlRouterProvider.otherwise("/login");
 
@@ -41,6 +46,20 @@ angular.module("estApp")
                 },
                 params: {
                     employeeId: null
+                }
+            })
+            .state("main.job", {
+                views: {
+                    "sectionView": {
+                        templateUrl: "/job"
+                    }
+                }
+            })
+            .state("main.job.add", {
+                views: {
+                    "sectionView@main": {
+                        templateUrl: "/addJob"
+                    }
                 }
             })
             .state("main.employee.schedule", {
