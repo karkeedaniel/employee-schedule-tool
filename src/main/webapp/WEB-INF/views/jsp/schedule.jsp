@@ -64,7 +64,7 @@
                             <td>{{jobSchedule.schedule.travelTime}}</td>
                             <td>{{jobSchedule.job.jobState}}</td>
                             <td>
-                                <button type="button" class="btn btn-small btn-primary" ng-click="open(jobSchedule.job.jobName, jobSchedule.location)"><i class="fa fa-globe"></i></button>
+                                <button ng-show="jobSchedule.location" type="button" class="btn btn-small btn-primary" ng-click="open(jobSchedule.job.jobName, jobSchedule.location)"><i class="fa fa-globe"></i></button>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-small btn-primary"
