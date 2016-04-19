@@ -6,7 +6,7 @@ angular.module("estApp")
         $scope.register = function(registration) {
             $http({
                 method: "post",
-                url: "/register",
+                url: "register",
                 data: registration
             }).then(function successCallback() {
                 $scope.success = true;

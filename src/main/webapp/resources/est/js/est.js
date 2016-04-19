@@ -9,39 +9,36 @@ angular.module("estApp")
             requireBase: false
         });
 
-        $urlRouterProvider.otherwise("/login");
+        $urlRouterProvider.otherwise("login");
 
         $stateProvider
             .state("login", {
-                url: "/login",
-                templateUrl: "/login"
+                templateUrl: "login"
             })
             .state("register", {
-                url: "/register",
-                templateUrl: "/register"
+                templateUrl: "register"
             })
             .state("main", {
-                url: "/main",
-                templateUrl: "/main"
+                templateUrl: "main"
             })
             .state("main.employee", {
                 views: {
                     "sectionView": {
-                        templateUrl: "/employee"
+                        templateUrl: "employee"
                     }
                 }
             })
             .state("main.employee.add", {
                 views: {
                     "sectionView@main": {
-                        templateUrl: "/addEmployee"
+                        templateUrl: "addEmployee"
                     }
                 }
             })
             .state("main.employee.edit", {
                 views: {
                     "sectionView@main": {
-                        templateUrl: "/editEmployee"
+                        templateUrl: "editEmployee"
                     }
                 },
                 params: {
@@ -51,35 +48,35 @@ angular.module("estApp")
             .state("main.job", {
                 views: {
                     "sectionView": {
-                        templateUrl: "/job"
+                        templateUrl: "job"
                     }
                 }
             })
             .state("main.job.add", {
                 views: {
                     "sectionView@main": {
-                        templateUrl: "/addJob"
+                        templateUrl: "addJob"
                     }
                 }
             })
             .state("main.employee.schedule", {
                 views: {
                     "sectionView@main": {
-                        templateUrl: "/schedule"
+                        templateUrl: "schedule"
                     }
                 }
             })
             .state("main.approval", {
                 views: {
                     "sectionView": {
-                        templateUrl: "/approval"
+                        templateUrl: "approval"
                     }
                 }
             })
             .state("main.schedule", {
                 views: {
                     "sectionView": {
-                        templateUrl: "/schedule"
+                        templateUrl: "schedule"
                     }
                 }
             });
@@ -87,6 +84,7 @@ angular.module("estApp")
         $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
     })
     .controller("estCtrl", function($rootScope, $scope, $http, $state) {
+        $state.go("login");
         $scope.logout = function () {
             $http.post('logout', {}).success(function () {
                 $rootScope.authenticated = false;

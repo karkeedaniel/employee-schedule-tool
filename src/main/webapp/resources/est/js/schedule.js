@@ -8,7 +8,7 @@ angular.module("estApp")
         getByDate = function(date) {
             $http({
                 method: "get",
-                url: "/job-schedule/getByEmployeeIdAndStartTime",
+                url: "job-schedule/getByEmployeeIdAndStartTime",
                 params: {
                     'employeeId': $rootScope.id,
                     'startTime': $filter('date')(date, "yyyy-MM-dd HH:mm:ss")
@@ -66,7 +66,7 @@ angular.module("estApp")
             }
             $http({
                 method: "put",
-                url: "/job/update",
+                url: "job/update",
                 data: newJob
             }).then(function successCallback() {
                 $state.go("main.schedule");

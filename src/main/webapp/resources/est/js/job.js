@@ -7,7 +7,7 @@ angular.module("estApp")
 
         $http({
             method: "get",
-            url: "/job/get-all/"
+            url: "job/get-all/"
         }).then(function successCallback(response) {
             $scope.jobList = response.data;
         });
@@ -18,7 +18,7 @@ angular.module("estApp")
             jobWithLocation.location = location;
             $http({
                 method: "post",
-                url: "/job-location/persist",
+                url: "job-location/persist",
                 data: jobWithLocation
             }).then(function successCallback(response) {
                 // TODO - need to work on alert message.

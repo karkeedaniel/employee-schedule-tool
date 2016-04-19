@@ -7,7 +7,7 @@ angular.module("estApp")
 
         $http({
             method: "get",
-            url: "/employee/get-all/"
+            url: "employee/get-all/"
         }).then(function successCallback(response) {
             $scope.employeeList = response.data;
         });
@@ -18,7 +18,7 @@ angular.module("estApp")
             employeeLocation.location = location;
             $http({
                 method: "post",
-                url: "/employee-location/persist",
+                url: "employee-location/persist",
                 data: employeeLocation
             }).then(function successCallback(response) {
                 $scope.success = true;
@@ -38,7 +38,7 @@ angular.module("estApp")
     .controller("editEmployeeCtrl", function($scope, $state, $stateParams, $http) {
         $http({
             method: "get",
-            url: "/employee-location/get",
+            url: "employee-location/get",
             params: {
                 'employeeId': $stateParams.employeeId
             }
@@ -57,7 +57,7 @@ angular.module("estApp")
             employeeLocation.location = location;
             $http({
                 method: "put",
-                url: "/employee-location/update",
+                url: "employee-location/update",
                 data: employeeLocation
             }).then(function successCallback(response) {
                 $scope.success = true;
