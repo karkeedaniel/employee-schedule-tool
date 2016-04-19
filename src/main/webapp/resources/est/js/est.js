@@ -13,15 +13,19 @@ angular.module("estApp")
 
         $stateProvider
             .state("login", {
+                url: "/login",
                 templateUrl: "login"
             })
             .state("register", {
+                url: "/register",
                 templateUrl: "register"
             })
             .state("main", {
+                url: "/main",
                 templateUrl: "main"
             })
             .state("main.employee", {
+                url: "/employee",
                 views: {
                     "sectionView": {
                         templateUrl: "employee"
@@ -29,6 +33,7 @@ angular.module("estApp")
                 }
             })
             .state("main.employee.add", {
+                url: "/add",
                 views: {
                     "sectionView@main": {
                         templateUrl: "addEmployee"
@@ -36,6 +41,7 @@ angular.module("estApp")
                 }
             })
             .state("main.employee.edit", {
+                url: "/edit",
                 views: {
                     "sectionView@main": {
                         templateUrl: "editEmployee"
@@ -46,6 +52,7 @@ angular.module("estApp")
                 }
             })
             .state("main.job", {
+                url: "/job",
                 views: {
                     "sectionView": {
                         templateUrl: "job"
@@ -53,6 +60,7 @@ angular.module("estApp")
                 }
             })
             .state("main.job.add", {
+                url: "/add",
                 views: {
                     "sectionView@main": {
                         templateUrl: "addJob"
@@ -60,20 +68,15 @@ angular.module("estApp")
                 }
             })
             .state("main.employee.schedule", {
+                url: "/schedule",
                 views: {
                     "sectionView@main": {
                         templateUrl: "schedule"
                     }
                 }
             })
-            .state("main.approval", {
-                views: {
-                    "sectionView": {
-                        templateUrl: "approval"
-                    }
-                }
-            })
             .state("main.schedule", {
+                url: "/schedule",
                 views: {
                     "sectionView": {
                         templateUrl: "schedule"
