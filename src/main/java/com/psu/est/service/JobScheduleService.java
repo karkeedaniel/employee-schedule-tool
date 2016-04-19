@@ -36,9 +36,11 @@ public class JobScheduleService {
         for (Schedule schedule : scheduleList) {
             JobSchedule jobSchedule = new JobSchedule();
             jobSchedule.setSchedule(schedule);
-            Job job = jobDao.get(schedule.getJobId());
-            jobSchedule.setJob(job);
-            jobSchedule.setLocation(locationDao.get(job.getJobLocation()));
+            if (schedule.getJobId() != null || schedule.getJobId() != 0) {
+                Job job = jobDao.get(schedule.getJobId());
+                jobSchedule.setJob(job);
+                jobSchedule.setLocation(locationDao.get(job.getJobLocation()));
+            }
             jobScheduleList.add(jobSchedule);
         }
         return jobScheduleList;
