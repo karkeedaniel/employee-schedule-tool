@@ -60,8 +60,8 @@
                         <tr ng-repeat="jobSchedule in jobScheduleList">
                             <td>{{jobSchedule.job.jobName}}</td>
                             <td>{{jobSchedule.schedule.type}}</td>
-                            <td>{{jobSchedule.schedule.startTime | date : 'shortTime' : '+0430'}}</td>
-                            <td>{{jobSchedule.schedule.endTime | date : 'shortTime' : '+0430'}}</td>
+                            <td>{{jobSchedule.schedule.startTime | date : 'shortTime' : '+0'}}</td>
+                            <td>{{jobSchedule.schedule.endTime | date : 'shortTime' : '+0'}}</td>
                             <td>{{jobSchedule.schedule.travelTime}}</td>
                             <td>{{jobSchedule.job.jobState}}</td>
                             <td>
