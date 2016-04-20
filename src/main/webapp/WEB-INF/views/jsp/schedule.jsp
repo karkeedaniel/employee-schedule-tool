@@ -29,7 +29,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-2 text-center">
-                        <h4>{{date | date : 'mediumDate'}}</h4>
+                        <h4>{{date | date : 'EEE, MMMM d, y'}}</h4>
                     </div>
                     <div class="col-xs-4">
                         <button type="button" class="btn btn-default" ng-click="currDate()">Today</button>
