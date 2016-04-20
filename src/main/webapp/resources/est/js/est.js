@@ -4,7 +4,7 @@
 angular.module("estApp")
     .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
-        $urlRouterProvider.otherwise("login");
+        $urlRouterProvider.otherwise("/login");
 
         $stateProvider
             .state("login", {
