@@ -9,7 +9,7 @@ angular.module("estApp")
             requireBase: false
         });
 
-        $urlRouterProvider.otherwise("login");
+        //$urlRouterProvider.otherwise("login");
 
         $stateProvider
             .state("login", {
