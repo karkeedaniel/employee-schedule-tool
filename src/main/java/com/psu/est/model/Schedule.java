@@ -9,6 +9,7 @@ import java.sql.Timestamp;
  * Created by gorzelic on 3/19/2016.
  */
 @Entity
+@Table(name = "schedule", schema = "est")
 public class Schedule implements DomainObject {
     private Integer scheduleId;
     private String type;

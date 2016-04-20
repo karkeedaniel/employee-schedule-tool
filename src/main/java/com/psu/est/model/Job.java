@@ -13,6 +13,7 @@ import java.util.Date;
  * Created by gorzelic on 2/28/2016.
  */
 @Entity
+@Table(name = "job", schema = "est")
 public class Job implements DomainObject {
 
 

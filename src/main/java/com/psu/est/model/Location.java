@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 
 @Entity
+@Table(name = "location", schema = "est")
 public class Location implements DomainObject, Serializable {
 
 

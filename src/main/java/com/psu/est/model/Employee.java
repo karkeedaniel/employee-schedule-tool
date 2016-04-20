@@ -10,6 +10,7 @@ import java.sql.Date;
  * Created by danielkarkee on 2/2/16.
  */
 @Entity
+@Table(name = "employee", schema = "est")
 public class Employee implements DomainObject {
 
     private int employeeId;
