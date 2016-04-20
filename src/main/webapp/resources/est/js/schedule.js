@@ -2,7 +2,17 @@
  * Created by danielkarkee on 4/6/16.
  */
 angular.module("estApp")
-    .controller("scheduleCtrl", function($rootScope, $scope, $http, $filter, $uibModal, $state, DTOptionsBuilder, DTColumnDefBuilder) {
+    .controller("scheduleCtrl", function($rootScope, $scope, $http, $filter, $uibModal, $state, DTOptionsBuilder, DTColumnDefBuilder, $stateParams) {
+        var employeeId = $stateParams.employeeId;
+        var showButton = true;
+        if (!employeeId) {
+            employeeId = $rootScope.id;
+            showButton = false;
+        }
+
+        $scope.showButton = showButton;
+
+        console.log($stateParams.employeeId);
         $scope.jobScheduleList = [];
 
         getByDate = function(date) {
@@ -10,7 +20,7 @@ angular.module("estApp")
                 method: "get",
                 url: "job-schedule/getByEmployeeIdAndStartTime",
                 params: {
-                    'employeeId': $rootScope.id,
+                    'employeeId': employeeId,
                     'startTime': $filter('date')(date, "yyyy-MM-dd HH:mm:ss")
                 }
             }).then(function successCallback(response) {
@@ -77,10 +87,15 @@ angular.module("estApp")
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
             .withOption('order', [3, 'asc']);
+
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(6).notSortable(),
             DTColumnDefBuilder.newColumnDef(7).notSortable()
         ];
+
+        $scope.return = function() {
+            $state.go("main.employee");
+        };
     })
     .controller('locationModalInstanceCtrl', function ($scope, $uibModalInstance, job) {
         $scope.job = job;

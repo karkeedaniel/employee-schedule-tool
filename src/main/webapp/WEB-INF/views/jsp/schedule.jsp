@@ -28,17 +28,18 @@
         <div class="panel panel-primary" ng-controller="scheduleCtrl">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-xs-1">
                         <h5>{{date | date : 'mediumDate'}}</h5>
                     </div>
-                    <div class="col-md-8">
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default" ng-click="currDate()">Today</button>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default" ng-click="prevDate(date)">Prev</button>
-                                <button type="button" class="btn btn-default" ng-click="nextDate(date)">Next</button>
-                            </div>
+                    <div class="col-xs-5">
+                        <button type="button" class="btn btn-default" ng-click="currDate()">Today</button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" ng-click="prevDate(date)">Prev</button>
+                            <button type="button" class="btn btn-default" ng-click="nextDate(date)">Next</button>
                         </div>
+                    </div>
+                    <div ng-show="showButton" class="col-xs-6">
+                        <button type="button" class="btn btn-warning pull-right" ng-click="return()">Return to Employee</button>
                     </div>
                 </div>
             </div>
