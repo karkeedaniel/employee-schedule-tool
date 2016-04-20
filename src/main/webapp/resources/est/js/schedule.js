@@ -76,7 +76,7 @@ angular.module("estApp")
         };
 
         $scope.dtOptions = DTOptionsBuilder.newOptions()
-            .withOption('order', [2, 'asc']);
+            .withOption('order', [3, 'asc']);
         $scope.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(6).notSortable(),
             DTColumnDefBuilder.newColumnDef(7).notSortable()
