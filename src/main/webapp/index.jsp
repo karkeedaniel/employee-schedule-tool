@@ -48,8 +48,6 @@
         <script src="${scheduleJS}"></script>
         <script src="${jobJS}"></script>
 
-        <base href="/est/"></base>
-
     </head>
     <body ng-controller="estCtrl">
     <nav class="navbar navbar-default navbar-static-top">
