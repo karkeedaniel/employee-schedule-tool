@@ -6,6 +6,7 @@ import com.psu.est.model.Employee;
 import com.psu.est.model.EmployeeAccount;
 import com.psu.est.service.exception.ValidationException;
 import com.psu.est.view.Registration;
+import com.psu.est.view.Reset;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,36 @@ public class EmployeeAccountService {
      */
     public EmployeeAccount getByUsername(String username) {
         return employeeAccountDao.getByUsername(username);
+    }
+
+    public void resetPassword(Reset reset) {
+        Employee employee = employeeDao.getByEmployeeNum(reset.getEmployeeNum());
+
+        if(resetPasswordValidation(reset, employee)) {
+            EmployeeAccount employeeAccount = employee.getEmployeeAccount();
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            employeeAccount.setPassword(passwordEncoder.encode(reset.getPassword()));
+            employeeAccountDao.update(employeeAccount);
+        } else {
+            throw new ValidationException();
+        }
+    }
+
+    private boolean resetPasswordValidation(Reset reset, Employee employee) {
+
+        if (employee == null)
+            return false;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(employee.getDob().getTime());
+
+        if (reset.getYear() != calendar.getWeekYear())
+            return false;
+
+        if (employee.getEmployeeAccount() == null)
+            return false;
+
+        return employee.getEmployeeAccount().getUsername().equals(reset.getUsername());
+
     }
 }

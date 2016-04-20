@@ -26,6 +26,7 @@
         <spring:url value="/resources/est/js/register.js" var="registerJS" />
         <spring:url value="/resources/est/js/schedule.js" var="scheduleJS" />
         <spring:url value="/resources/est/js/job.js" var="jobJS" />
+        <spring:url value="/resources/est/js/reset.js" var="resetJS" />
 
         <script src="${jqueryJS}"></script>
         <script src="${angularJS}"></script>
@@ -47,6 +48,7 @@
         <script src="${registerJS}"></script>
         <script src="${scheduleJS}"></script>
         <script src="${jobJS}"></script>
+        <script src="${resetJS}"></script>
 
     </head>
     <body ng-controller="estCtrl">
