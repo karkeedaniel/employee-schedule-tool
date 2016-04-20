@@ -15,6 +15,10 @@ angular.module("estApp")
                 url: "/register",
                 templateUrl: "register"
             })
+            .state("reset", {
+                url: "/reset",
+                templateUrl: "reset"
+            })
             .state("main", {
                 url: "/main",
                 templateUrl: "main"

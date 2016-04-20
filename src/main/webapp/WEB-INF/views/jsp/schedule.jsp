@@ -28,10 +28,10 @@
         <div class="panel panel-primary" ng-controller="scheduleCtrl">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-1">
-                        <h5>{{date | date : 'mediumDate'}}</h5>
+                    <div class="col-xs-2 text-center">
+                        <h4>{{date | date : 'mediumDate'}}</h4>
                     </div>
-                    <div class="col-xs-5">
+                    <div class="col-xs-4">
                         <button type="button" class="btn btn-default" ng-click="currDate()">Today</button>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default" ng-click="prevDate(date)">Prev</button>

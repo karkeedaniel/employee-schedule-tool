@@ -99,7 +99,7 @@
                                     <div class="col-xs-10">
                                         <input type="password" class="form-control" id="confPassword" name="confPassword"
                                                placeholder="Confirm Password" ng-minlength="8"
-                                               ng-model="confPassword" required>
+                                               ng-model="confPassword" ng-valid="false" required>
                                         <span ng-show="registerForm.confPassword.$valid"
                                               class="glyphicon glyphicon-ok form-control-feedback"></span>
                                         <span ng-show="!registerForm.confPassword.$valid && registerForm.confPassword.$dirty"
