@@ -62,11 +62,6 @@
         <org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
         <org.hibernate.version>4.3.6.Final</org.hibernate.version>
         <mysql.version>5.1.31</mysql.version>
-        <!-- srg hibernate5 testing for time types
-          <java.version>1.8</java.version>
-          <org.hibernate.version>5.0.0.Final</org.hibernate.version>
-          <mysql.version>5.1.36</mysql.version>
-        -->
         <servlet.version>3.1.0</servlet.version>
         <jstl.version>1.2</jstl.version>
         <log4j.version>2.5</log4j.version>
@@ -93,6 +88,17 @@
       </dependencyManagement>
 
       <dependencies>
+          <dependency>
+              <groupId>commons-logging</groupId>
+              <artifactId>commons-logging-api</artifactId>
+              <version>1.1</version>
+              <exclusions>
+                  <exclusion>
+                      <groupId>javax.servlet</groupId>
+                      <artifactId>servlet-api</artifactId>
+                  </exclusion>
+              </exclusions>
+          </dependency>
           <dependency>
               <groupId>org.springframework</groupId>
               <artifactId>spring-core</artifactId>
@@ -140,18 +146,6 @@
               <artifactId>hibernate-entitymanager</artifactId>
               <version>${org.hibernate.version}</version>
           </dependency>
-          <!-- srg - hibernate 5 testing
-          <dependency>
-              <groupId>org.hibernate</groupId>
-              <artifactId>hibernate-java8</artifactId>
-              <version>${org.hibernate.version}</version>
-          </dependency>
-          <dependency>
-              <groupId>org.hibernate</groupId>
-              <artifactId>hibernate-c3p0</artifactId>
-              <version>${org.hibernate.version}</version>
-          </dependency>
-          -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -197,9 +191,6 @@
             <groupId>com.google.maps</groupId>
             <artifactId>google-maps-services</artifactId>
             <version>0.1.10</version>
-            <!--
-            <version>${googlemaps.version}</version>
-            -->
         </dependency>
         <dependency>
             <groupId>junit</groupId>
