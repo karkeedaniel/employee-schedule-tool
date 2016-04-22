@@ -15,7 +15,7 @@
                         <h4>Schedule Job</h4>
                     </div>
                     <div class="col-xs-6">
-                        <button type="button" class="btn btn-warning pull-right" ng-click="return()">Return to Employee</button>
+                        <button type="button" class="btn btn-warning pull-right" ng-click="return()">Return To Jobs</button>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@
                                 <td>{{job.jobName}}</td>
                                 <td>{{job.siteContactName}}</td>
                                 <td>{{job.jobPhone}}</td>
-                                <td>{{job.jobDate}}</td>
+                                <td>{{job.jobDate | date}}</td>
                                 <td>{{job.jobState}}</td>
                                  <td>
                                     <a class="btn btn-small btn-primary" ui-sref=".edit"><i class="fa fa-pencil-square"></i></a>
